@@ -126,6 +126,7 @@ void Player::jump() {
 }
 
 void Player::lookUp() {
+	// UNUSED
 	this->_lookingUp = true;
 	if (this->_dx == 0) {
 		this->playAnimation(this->_facing == RIGHT ? "IdleRightUp" : "IdleLeftUp");
@@ -136,21 +137,25 @@ void Player::lookUp() {
 }
 
 void Player::stopLookingUp() {
+	// UNUSED
 	this->_lookingUp = false;
 }
 
+
 void Player::lookDown() {
-	/*
+	// UNUSED
 	this->_lookingDown = true;
 	if (this->_grounded) {
 		// We need to interact and turn backwards
 		this->playAnimation(this->_facing == RIGHT ? "LookBackwardsRight" : "LookBackwardsLeft");
-	} 
+	}
 	else {
 		this->playAnimation(this->_facing == RIGHT ? "LookDownRight" : "LookDownLeft");
 	}
-	*/
-	// TODO: rename this function dropDown()
+}
+
+
+void Player::dropDown() {
 	if (this->_grounded) {
 		this->_y += 1;
 		this->_grounded = false;
@@ -158,6 +163,7 @@ void Player::lookDown() {
 }
 
 void Player::stopLookingDown() {
+	// UNUSED
 	this->_lookingDown = false;
 }
 

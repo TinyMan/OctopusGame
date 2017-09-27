@@ -64,59 +64,63 @@ void Game::gameLoop() {
 
 		// Moving left and right
 		//		- first player
-		if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
-			this->_players.at(0).moveLeft();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
-			this->_players.at(0).moveRight();
-		}
+			if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
+				this->_players.at(0).moveLeft();
+			}
+			else if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
+				this->_players.at(0).moveRight();
+			}
 		//		- second player
-		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			this->_players.at(1).moveLeft();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			this->_players.at(1).moveRight();
-		}
+			if (input.isKeyHeld(SDL_SCANCODE_A)) {
+				this->_players.at(1).moveLeft();
+			}
+			else if (input.isKeyHeld(SDL_SCANCODE_D)) {
+				this->_players.at(1).moveRight();
+			}
 
-
+		//////////////// TODO: remove, UNUSED ////////////////////////////////////////
 		// Looking up
 		if (input.isKeyHeld(SDL_SCANCODE_UP)) {
 			this->_players.at(0).lookUp();
-		}
-		// Dropping down
-		else if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
-			this->_players.at(0).lookDown();
 		}
 
 		// Stop looking up
 		if (input.wasKeyReleased(SDL_SCANCODE_UP)) {
 			this->_players.at(0).stopLookingUp();
 		}
-		// TODO: maybe not useful
+		// Stop looking down
 		if (input.wasKeyReleased(SDL_SCANCODE_DOWN)) {
 			this->_players.at(0).stopLookingDown();
 		}
+		//////////////// TODO: remove, UNUSED ////////////////////////////////////////
 
-		// Jumping
-		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
-			this->_players.at(0).jump();
-		}
-		//		- second player
-		if (input.wasKeyPressed(SDL_SCANCODE_W)) {
-			this->_players.at(1).jump();
-		}
-
-		// Shooting
+		// Dropping down and jumping
 		//		- first player
-		if (input.wasKeyPressed(SDL_SCANCODE_KP_4)) {
-			this->_bullets.push_back(Bullet(graphics, Vector2((int)this->_players.at(0).getX(), (int)this->_players.at(0).getY()),
-				this->_players.at(0).getFacing(), 0.2f));
-		}
+			if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
+				this->_players.at(0).dropDown();
+			} 
+			else if (input.wasKeyPressed(SDL_SCANCODE_UP)) {
+				this->_players.at(0).jump();
+			}
 		//		- second player
-		if (input.wasKeyPressed(SDL_SCANCODE_G)) {
-			this->_bullets.push_back(Bullet(graphics, Vector2((int)this->_players.at(1).getX(), (int)this->_players.at(1).getY()),
-				this->_players.at(1).getFacing(), 0.2f));
-		}
+			if (input.wasKeyPressed(SDL_SCANCODE_S) || input.isKeyHeld(SDL_SCANCODE_S)) {
+				this->_players.at(1).dropDown();
+			}
+			else if (input.wasKeyPressed(SDL_SCANCODE_W)) {
+				this->_players.at(1).jump();
+			}
+
+		// Firing weapon
+		//		- first player
+			if (input.wasKeyPressed(SDL_SCANCODE_KP_4)) {
+				this->_bullets.push_back(Bullet(graphics, Vector2((int)this->_players.at(0).getX(), (int)this->_players.at(0).getY()),
+					this->_players.at(0).getFacing(), 0.2f));
+			}
+		//		- second player
+			if (input.wasKeyPressed(SDL_SCANCODE_G)) {
+				this->_bullets.push_back(Bullet(graphics, Vector2((int)this->_players.at(1).getX(), (int)this->_players.at(1).getY()),
+					this->_players.at(1).getFacing(), 0.2f));
+			}
 
 		// Stop motion
 		//		- first player

@@ -5,7 +5,7 @@
 #include "animatedtile.h"
 #include "graphics.h"
 
-AnimatedTile::AnimatedTile(std::vector<Vector2> tilesetPositions, int duration, SDL_Texture* tileset,
+AnimatedTile::AnimatedTile(std::vector<Vector2> tilesetPositions, float duration, SDL_Texture* tileset,
 	Vector2 size, Vector2 position) :
 	Tile(tileset, size, tilesetPositions.at(0), position),
 	_tilesetPositions(tilesetPositions),

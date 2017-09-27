@@ -34,6 +34,9 @@ public:
 
 	// Make the player look down OR interact
 	void lookDown();
+
+	// Makes the player drop if he is on a platform (horizontal)
+	void dropDown();
 	
 	// Stops the player from looking down
 	void stopLookingDown();

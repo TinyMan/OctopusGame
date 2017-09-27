@@ -82,7 +82,7 @@ void Level::loadMap(std::string mapName, GraphicalOctopus &graphics) {
 							if (pFrame != NULL) {
 								while (pFrame) {
 									ati.tileIds.push_back(pFrame->IntAttribute("tileid") + firstgid);
-									ati.duration = pFrame->IntAttribute("duration");
+									ati.duration = pFrame->FloatAttribute("duration");
 
 									pFrame = pFrame->NextSiblingElement("frame");
 								}
