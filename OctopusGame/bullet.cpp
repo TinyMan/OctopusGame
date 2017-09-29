@@ -24,6 +24,12 @@ Bullet::Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing,
 	}
 }
 
+Bullet::Bullet(GraphicalOctopus &graphics, Player &player, float speed) :
+	Bullet(graphics, Vector2((int)player.getX(), (int)player.getY()), player.getFacing(), speed)
+{
+	this->_player = player;
+}
+
 void Bullet::draw(GraphicalOctopus &graphics) {
 	AnimatedSprite::draw(graphics, (int)(this->_x), (int)(this->_y));
 }
@@ -48,9 +54,6 @@ void Bullet::setupAnimations() {
 	this->addAnimation(1, 1, 0, "BulletLeft", 9, 9 , Vector2(0, 0));
 }
 
-/*
-void Bullet::handleTileCollision(std::vector<Rectangle> &others) {
-	if (others.size() != 0)
-		return;
+const Player Bullet::getPlayer() const {
+	return this->_player;
 }
-*/

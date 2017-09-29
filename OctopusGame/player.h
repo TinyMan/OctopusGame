@@ -14,32 +14,22 @@ public:
 	void draw(GraphicalOctopus &graphics);
 	void update(float elapsedTime);
 
-	// Move the player left by -dx
+	// Movement functions
 	void moveLeft();
-
-	// Move the player right by dx
 	void moveRight();
-
-	// Stops the movement of the player
 	void stopMoving();
 
 	// Starts jumping
 	void jump();
 
-	// Make the player look up
+	// Looking up or down
 	void lookUp();
-
-	// Stops the player from looking up
 	void stopLookingUp();
-
-	// Make the player look down OR interact
 	void lookDown();
+	void stopLookingDown();
 
 	// Makes the player drop if he is on a platform (horizontal)
 	void dropDown();
-	
-	// Stops the player from looking down
-	void stopLookingDown();
 
 	// Logic that happens when an animation ends
 	virtual void animationDone(std::string currentAnimation);
@@ -47,20 +37,24 @@ public:
 	// A required function that sets up all the animation for a sprite
 	virtual void setupAnimations();
 
+	// Handling collisions
 	void handleTileCollisions(std::vector<Rectangle> &others);
 	void handleSlopeCollisions(std::vector<Slope> &others);
 
 	// Getters :
+	const int getId() const;
 	const float getX() const;
 	const float getY() const;
 	const float getPreviousX() const;
 	const float getPreviousY() const;
 	const Direction getFacing() const;
-
 	const int getMaxHealth() const;
 	const int getCurrentHealth() const;
 
 private:
+	int _id;
+	static int _numberOfPlayers;
+
 	float _dx, _dy;
 	float _previousX, _previousY;
 	Direction _facing;
@@ -71,4 +65,7 @@ private:
 
 	int _maxHealth, _currentHealth;
 };
+
+// Operators redefinition :
+bool operator==(Player const &player1, Player const &player2);
 #endif // !PLAYER_H

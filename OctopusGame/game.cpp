@@ -113,13 +113,11 @@ void Game::gameLoop() {
 		// Firing weapon
 		//		- first player
 			if (input.wasKeyPressed(SDL_SCANCODE_KP_4)) {
-				this->_bullets.push_back(Bullet(graphics, Vector2((int)this->_players.at(0).getX(), (int)this->_players.at(0).getY()),
-					this->_players.at(0).getFacing(), 0.2f));
+				this->_bullets.push_back(Bullet(graphics, this->_players.at(0), 0.2f));
 			}
 		//		- second player
 			if (input.wasKeyPressed(SDL_SCANCODE_G)) {
-				this->_bullets.push_back(Bullet(graphics, Vector2((int)this->_players.at(1).getX(), (int)this->_players.at(1).getY()),
-					this->_players.at(1).getFacing(), 0.2f));
+				this->_bullets.push_back(Bullet(graphics, this->_players.at(1), 0.2f));
 			}
 
 		// Stop motion
@@ -205,6 +203,16 @@ void Game::update(float elapsedTime) {
 	}
 
 	// Check projectile collisions with players
+	
+	for (int i = 0; i < (int)this->_bullets.size(); i++) {
+		for (int j = 0; j < (int)this->_players.size(); j++) {
+			if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
+				&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
+				this->_bullets.erase(this->_bullets.begin() + i);
+			}
+		}
+	}
+	
 
 	// Check player collisions with slopes
 	for (int i = 0; i < (int)this->_players.size(); i++) {

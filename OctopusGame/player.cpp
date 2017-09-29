@@ -14,6 +14,7 @@ namespace player_constants {
 	const float GRAVITY_CAP = 0.8f;
 }
 
+int Player::_numberOfPlayers = 0;
 
 Player::Player() {
 
@@ -30,6 +31,9 @@ Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
 	_maxHealth(3),
 	_currentHealth(3)
 {
+	this->_numberOfPlayers++;
+	this->_id = this->_numberOfPlayers;
+
 	graphics.loadImage("Content/Sprites/MyCharPNG.png");
 	this->setupAnimations();
 	this->playAnimation("IdleRight");
@@ -241,4 +245,12 @@ void Player::update(float elapsedTime) {
 
 void Player::draw(GraphicalOctopus &graphics) {
 	AnimatedSprite::draw(graphics, (int)(this->_x), (int)(this->_y));
+}
+
+const int Player::getId() const {
+	return this->_id;
+}
+
+bool operator==(const Player &player1, const Player &bullet2) {
+	return (player1.getId() == bullet2.getId());
 }

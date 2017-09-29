@@ -62,8 +62,6 @@ void Level::loadMap(std::string mapName, GraphicalOctopus &graphics) {
 			std::stringstream ss;
 			ss << source;
 
-			//printf(ss.str().c_str());
-
 			pTileset->QueryIntAttribute("firstgid", &firstgid);
 			SDL_Texture* tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(ss.str()));
 			this->_tilesets.push_back(Tileset(tex, firstgid));
