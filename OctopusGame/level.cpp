@@ -219,10 +219,10 @@ pLayer = pLayer->NextSiblingElement("layer");
 						height = pObject->FloatAttribute("height");
 
 						this->_verticalCollisionRects.push_back(Rectangle(
-							(int)(std::ceil(x) * globals::SPRITE_SCALE),
-							(int)(std::ceil(y) * globals::SPRITE_SCALE),
-							(int)(std::ceil(width) * globals::SPRITE_SCALE),
-							(int)(std::ceil(height) * globals::SPRITE_SCALE)
+							(int)(std::ceil(x) * globals::TILE_SCALE),
+							(int)(std::ceil(y) * globals::TILE_SCALE),
+							(int)(std::ceil(width) * globals::TILE_SCALE),
+							(int)(std::ceil(height) * globals::TILE_SCALE)
 						));
 
 						pObject = pObject->NextSiblingElement("object");
@@ -240,10 +240,10 @@ pLayer = pLayer->NextSiblingElement("layer");
 						height = pObject->FloatAttribute("height");
 
 						this->_horizontalCollisionRects.push_back(Rectangle(
-							(int)(std::ceil(x) * globals::SPRITE_SCALE),
-							(int)(std::ceil(y) * globals::SPRITE_SCALE),
-							(int)(std::ceil(width) * globals::SPRITE_SCALE),
-							(int)(std::ceil(height) * globals::SPRITE_SCALE)
+							(int)(std::ceil(x) * globals::TILE_SCALE),
+							(int)(std::ceil(y) * globals::TILE_SCALE),
+							(int)(std::ceil(width) * globals::TILE_SCALE),
+							(int)(std::ceil(height) * globals::TILE_SCALE)
 						));
 
 						pObject = pObject->NextSiblingElement("object");
@@ -279,10 +279,10 @@ pLayer = pLayer->NextSiblingElement("layer");
 
 						for (int i = 0; i < (int)points.size(); i += 2) {
 							this->_slopes.push_back(Slope(
-								Vector2((int)((p1.x + points.at(i < 2 ? i : i - 1).x) * globals::SPRITE_SCALE),
-								(int)((p1.y + points.at(i < 2 ? i : i - 1).y) * globals::SPRITE_SCALE)),
-								Vector2((int)((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::SPRITE_SCALE),
-								(int)((p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::SPRITE_SCALE))
+								Vector2((int)((p1.x + points.at(i < 2 ? i : i - 1).x) * globals::TILE_SCALE),
+								(int)((p1.y + points.at(i < 2 ? i : i - 1).y) * globals::TILE_SCALE)),
+								Vector2((int)((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::TILE_SCALE),
+								(int)((p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::TILE_SCALE))
 							));
 						}
 
@@ -300,8 +300,8 @@ pLayer = pLayer->NextSiblingElement("layer");
 						std::stringstream ss;
 						ss << name;
 						if (ss.str() == "player") {
-							this->_spawnPoint = Vector2((int)(std::ceil(x) * globals::SPRITE_SCALE),
-								(int)(std::ceil(y) * globals::SPRITE_SCALE));
+							this->_spawnPoint = Vector2((int)(std::ceil(x) * globals::TILE_SCALE),
+								(int)(std::ceil(y) * globals::TILE_SCALE));
 						}
 
 						pObject = pObject->NextSiblingElement("object");
@@ -344,8 +344,8 @@ std::vector<Rectangle> Level::checkTileCollision(Player &player) {
 
 	for (int i = 0; i < (int)this->_horizontalCollisionRects.size(); i++) {
 		if (this->_horizontalCollisionRects.at(i).collidesWith(other)
-			&& player.getPreviousY() + (16 * globals::SPRITE_SCALE) < this->_horizontalCollisionRects.at(i).getTop()) {
-			// TODO: remove 16 and put sprite size
+			&& player.getPreviousY() + (32 * globals::SPRITE_SCALE) < this->_horizontalCollisionRects.at(i).getTop()) {
+			// TODO: remove 32 and put sprite size
 			others.push_back(this->_horizontalCollisionRects.at(i));
 		}
 	}

@@ -35,7 +35,7 @@ void AnimatedTile::update(float elapsedTime) {
 
 void AnimatedTile::draw(GraphicalOctopus &graphics) {
 	SDL_Rect destRect = { this->_position.x, this->_position.y,
-			(int)(this->_size.x * globals::SPRITE_SCALE), (int)(this->_size.y * globals::SPRITE_SCALE) };
+			(int)(this->_size.x * globals::TILE_SCALE), (int)(this->_size.y * globals::TILE_SCALE) };
 	SDL_Rect sourceRect = { this->_tilesetPositions.at(this->_tileToDraw).x, this->_tilesetPositions.at(this->_tileToDraw).y,
 			this->_size.x, this->_size.y};
 	graphics.blitSurface(this->_tileset, &sourceRect, &destRect);

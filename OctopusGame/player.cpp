@@ -21,7 +21,7 @@ Player::Player() {
 }
 
 Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "Content/Sprites/MyCharPNG.png", 0, 0, 16, 16, (float)spawnPoint.x, (float)spawnPoint.y, 100),
+	AnimatedSprite(graphics, "Content/Sprites/BlobSprite.png", 0, 0, 32, 32, (float)spawnPoint.x, (float)spawnPoint.y, 100),
 	_dx(0.0f),
 	_dy(0.0f),
 	_facing(RIGHT),
@@ -34,24 +34,24 @@ Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
 	this->_numberOfPlayers++;
 	this->_id = this->_numberOfPlayers;
 
-	graphics.loadImage("Content/Sprites/MyCharPNG.png");
+	graphics.loadImage("Content/Sprites/BlobSprite.png");
 	this->setupAnimations();
 	this->playAnimation("IdleRight");
 }
 
 void Player::setupAnimations() {
-	this->addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0));
-	this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0, 0));
-	this->addAnimation(1, 3, 0, "IdleLeftUp", 16, 16, Vector2(0,0));
-	this->addAnimation(1, 3, 16, "IdleRightUp", 16, 16, Vector2(0,0));
-	this->addAnimation(3, 3, 0, "RunLeftUp", 16, 16, Vector2(0,0));
-	this->addAnimation(3, 3, 16, "RunRightUp", 16, 16, Vector2(0,0));
-	this->addAnimation(1, 6, 0, "LookDownLeft", 16, 16, Vector2(0,0));
-	this->addAnimation(1, 6, 16, "LookDownRight", 16, 16, Vector2(0,0));
-	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 16, 16, Vector2(0,0));
-	this->addAnimation(1, 7, 16, "LookBackwardsRight", 16, 16, Vector2(0, 0));
+	this->addAnimation(1, 0, 0, "IdleLeft", 32, 32, Vector2(0, 0));
+	this->addAnimation(1, 0, 32, "IdleRight", 32, 32, Vector2(0, 0));
+	this->addAnimation(3, 0, 0, "RunLeft", 32, 32, Vector2(0, 0));
+	this->addAnimation(3, 0, 32, "RunRight", 32, 32, Vector2(0, 0));
+	this->addAnimation(1, 3, 0, "IdleLeftUp", 32, 32, Vector2(0,0));
+	this->addAnimation(1, 3, 32, "IdleRightUp", 32, 32, Vector2(0,0));
+	this->addAnimation(3, 3, 0, "RunLeftUp", 32, 32, Vector2(0,0));
+	this->addAnimation(3, 3, 32, "RunRightUp", 32, 32, Vector2(0,0));
+	this->addAnimation(1, 6, 0, "LookDownLeft", 32, 32, Vector2(0,0));
+	this->addAnimation(1, 6, 32, "LookDownRight", 32, 32, Vector2(0,0));
+	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 32, 32, Vector2(0,0));
+	this->addAnimation(1, 7, 32, "LookBackwardsRight", 32, 32, Vector2(0, 0));
 }
 
 void Player::animationDone(std::string currentAnimation) {

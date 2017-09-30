@@ -17,16 +17,20 @@ HUD::HUD(GraphicalOctopus &graphics, Player &player) {
 }
 
 void HUD::update(float elapsedTime) {
+	/* TODO: re-do HUD
 	this->_healthNumber.setSourceRectX(8 * this->_player.getCurrentHealth());
 
 	// Calculate the width of the health bar (full = 39 px)
 	float num = (float)this->_player.getCurrentHealth() / this->_player.getMaxHealth();
 	this->_currentHealthBar.setSourceRectW((int)std::floor(num * 39));
+	*/
 }
 
 void HUD::draw(GraphicalOctopus &graphics) {
+	/* TODO: re-do HUD
 	this->_healthBarSprite.draw(graphics, (int)(this->_healthBarSprite.getX()), (int)(this->_healthBarSprite.getY()));
 	this->_healthNumber.draw(graphics, (int)(this->_healthNumber.getX()), (int)(this->_healthNumber.getY()));
 	this->_currentHealthBar.draw(graphics, (int)(this->_currentHealthBar.getX()), (int)(this->_currentHealthBar.getY()));
+	*/
 }
 

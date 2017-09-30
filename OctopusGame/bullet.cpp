@@ -25,7 +25,8 @@ Bullet::Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing,
 }
 
 Bullet::Bullet(GraphicalOctopus &graphics, Player &player, float speed) :
-	Bullet(graphics, Vector2((int)player.getX(), (int)player.getY()), player.getFacing(), speed)
+	Bullet(graphics, Vector2((int)(player.getX() + player.getBoundingBox().getWidth()/2), 
+	(int)(player.getY() + player.getBoundingBox().getHeight()/2)), player.getFacing(), speed)
 {
 	this->_player = player;
 }

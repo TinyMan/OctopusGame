@@ -59,8 +59,9 @@ void Game::gameLoop() {
 			}
 		}
 		// Quittting the game
-		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
+		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
 			return;
+		}
 
 		// Moving left and right
 		//		- first player
@@ -203,16 +204,21 @@ void Game::update(float elapsedTime) {
 	}
 
 	// Check projectile collisions with players
-	
+	std::vector<int> indexesToErase;
+
 	for (int i = 0; i < (int)this->_bullets.size(); i++) {
 		for (int j = 0; j < (int)this->_players.size(); j++) {
 			if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
 				&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
-				this->_bullets.erase(this->_bullets.begin() + i);
+				indexesToErase.push_back(i);
 			}
 		}
 	}
-	
+	// Erase all bullets that touched a player
+	for (int i = 0; i < (int)indexesToErase.size(); i++) {
+		this->_bullets.erase(this->_bullets.begin() + indexesToErase.at(i));
+	}
+
 
 	// Check player collisions with slopes
 	for (int i = 0; i < (int)this->_players.size(); i++) {
