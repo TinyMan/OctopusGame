@@ -26,11 +26,18 @@ public:
 	
 	// Returns the renderer
 	SDL_Renderer* getRenderer() const;
+	static Uint32 time() { return SDL_GetTicks(); }
 private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 
 	std::map<std::string, SDL_Surface*> _spriteSheets;
+
+	Uint32 _frameStart = 0;
+	Uint32 _nbFrames = 0;
+	float _fps = 0;
+	Uint32 _lastFpsUpdate = 0;
+	Uint32 _fpsUpdateInterval = 1000; /* 1000 ms */
 };
 
 #endif
