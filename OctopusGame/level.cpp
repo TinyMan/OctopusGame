@@ -63,7 +63,7 @@ void Level::loadMap(std::string mapName, GraphicalOctopus &graphics) {
 			ss << source;
 
 			pTileset->QueryIntAttribute("firstgid", &firstgid);
-			SDL_Texture* tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(ss.str()));
+			SDL_Texture* tex = graphics.loadImage(ss.str());
 			this->_tilesets.push_back(Tileset(tex, firstgid));
 
 			// Get all the animations for that tileset

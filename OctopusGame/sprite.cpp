@@ -20,7 +20,7 @@ Sprite::Sprite(GraphicalOctopus &graphics, const std::string &filePath, int sour
 	this->_sourceRect.w = width;
 	this->_sourceRect.h = height;
 
-	this->_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(filePath));
+	this->_spriteSheet = graphics.loadImage(filePath);
 
 	if (this->_spriteSheet == NULL) {
 		printf("Error : Unable to load image\n");
