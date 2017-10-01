@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 #include "graphics.h"
 #include "globals.h"
+#include <sstream>
 
 // Constructor
 GraphicalOctopus::GraphicalOctopus() {
@@ -35,11 +36,25 @@ void GraphicalOctopus::blitSurface(SDL_Texture* texture, SDL_Rect* sourceRectang
 
 // Renders everything to the screen
 void GraphicalOctopus::flip() {
+	Uint32 t = time();
+	Uint32 delta = t - _lastFpsUpdate;
+	if (delta > _fpsUpdateInterval)
+	{
+		//LOGINFO << "Updating fps count" << endl;
+		_fps = (float)_nbFrames / (delta / 1000.f);
+		_nbFrames = 0;
+		_lastFpsUpdate = t;
+		std::stringstream s;
+		s << "Octopus Game\t" <<_fps << " fps";
+		SDL_SetWindowTitle(_window, s.str().c_str());
+	}
 	SDL_RenderPresent(this->_renderer);
+	_nbFrames++;
 }
 
 // Clears the screen
 void GraphicalOctopus::clear() {
+	_frameStart = SDL_GetTicks();
 	SDL_RenderClear(this->_renderer);
 }
 
