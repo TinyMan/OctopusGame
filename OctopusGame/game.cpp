@@ -113,7 +113,7 @@ void Game::gameLoop() {
 
 		// Firing weapon
 		//		- first player
-			if (input.wasKeyPressed(SDL_SCANCODE_KP_4)) {
+			if (input.isKeyHeld(SDL_SCANCODE_KP_4)) {
 				this->_bullets.push_back(Bullet(graphics, this->_players.at(0), 0.2f));
 			}
 		//		- second player
@@ -195,17 +195,17 @@ void Game::update(float elapsedTime) {
 		}
 	}
 
+	std::vector<int> indexesToErase;
+
 	// Check projectile collisions with tiles
 	for (int i = 0; i < (int)this->_bullets.size(); i++) {
 		std::vector<Rectangle> others;
 		if ((others = this->_level.checkBulletCollision(this->_bullets.at(i).getBoundingBox())).size() > 0) {
-			this->_bullets.erase(this->_bullets.begin() + i);
+			indexesToErase.push_back(i);
 		}
 	}
 
 	// Check projectile collisions with players
-	std::vector<int> indexesToErase;
-
 	for (int i = 0; i < (int)this->_bullets.size(); i++) {
 		for (int j = 0; j < (int)this->_players.size(); j++) {
 			if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
@@ -214,9 +214,10 @@ void Game::update(float elapsedTime) {
 			}
 		}
 	}
+
 	// Erase all bullets that touched a player
 	for (int i = 0; i < (int)indexesToErase.size(); i++) {
-		this->_bullets.erase(this->_bullets.begin() + indexesToErase.at(i));
+		this->_bullets.erase(this->_bullets.begin() + indexesToErase.at(i) - i);
 	}
 
 
