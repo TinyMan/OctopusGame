@@ -45,7 +45,7 @@ void GraphicalOctopus::flip() {
 		_nbFrames = 0;
 		_lastFpsUpdate = t;
 		std::stringstream s;
-		s << "Octopus Game\t" <<_fps << " fps";
+		s << "Octopus Game - " <<_fps << " fps";
 		SDL_SetWindowTitle(_window, s.str().c_str());
 	}
 	SDL_RenderPresent(this->_renderer);
