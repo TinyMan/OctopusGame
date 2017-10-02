@@ -10,7 +10,7 @@ class Tile {
 public:
 	Tile();
 	Tile(SDL_Texture* tileset, Vector2 size, Vector2 tilesetPosition, Vector2 position);
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 	void draw(GraphicalOctopus &graphics);
 
 protected:

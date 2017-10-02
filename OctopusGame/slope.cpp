@@ -18,7 +18,7 @@ Slope::Slope(Vector2 p1, Vector2 p2) :
 	}
 }
 
-/*
+/* TODO: remove
 const float Slope::getSlope() const {
 	return this->_slope;
 }
@@ -46,7 +46,8 @@ const bool Slope::collidesWith(const Rectangle &other) const {
 			other.getTop() <= this->_p2.y &&
 			other.getBottom() >= this->_p1.y);
 }
-/*
+
+/* TODO: remove
 const Vector2 Slope::getP1() const {
 	return this->_p1;
 }

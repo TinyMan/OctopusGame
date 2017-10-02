@@ -11,8 +11,8 @@ AnimatedSprite::AnimatedSprite() {
 }
 
 AnimatedSprite::AnimatedSprite(GraphicalOctopus &graphics, const std::string filePath, int sourceX, int sourceY,
-	int width, int height, float posX, float posY, float timeToUpdate) :
-	Sprite(graphics, filePath, sourceX, sourceY, width, height, (float)posX, (float)posY),
+	int width, int height, int posX, int posY, int timeToUpdate) :
+	Sprite(graphics, filePath, sourceX, sourceY, width, height, posX, posY),
 	_frameIndex(0),
 	_timeToUpdate(timeToUpdate),
 	_visible(true),
@@ -53,7 +53,7 @@ void AnimatedSprite::stopAnimation() {
 	this->animationDone(this->_currentAnimation);
 }
 
-void AnimatedSprite::update(float elapsedTime) {
+void AnimatedSprite::update(int elapsedTime) {
 	Sprite::update();
 	this->_timeElapsed += elapsedTime;
 	if (this->_timeElapsed > this->_timeToUpdate) {

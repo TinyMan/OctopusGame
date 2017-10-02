@@ -21,7 +21,7 @@ Player::Player() {
 }
 
 Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "Content/Sprites/BlobSprite.png", 0, 0, 32, 32, (float)spawnPoint.x, (float)spawnPoint.y, 100),
+	AnimatedSprite(graphics, "Content/Sprites/BlobSprite.png", 0, 0, 32, 32, spawnPoint.x, spawnPoint.y, 100),
 	_dx(0.0f),
 	_dy(0.0f),
 	_facing(RIGHT),
@@ -58,19 +58,19 @@ void Player::animationDone(std::string currentAnimation) {
 
 }
 
-const float Player::getX() const {
+const int Player::getX() const {
 	return this->_x;
 }
 
-const float Player::getY() const {
+const int Player::getY() const {
 	return this->_y;
 }
 
-const float Player::getPreviousX() const {
+const int Player::getPreviousX() const {
 	return this->_previousX;
 }
 
-const float Player::getPreviousY() const {
+const int Player::getPreviousY() const {
 	return this->_previousY;
 }
 
@@ -123,7 +123,7 @@ void Player::stopMoving() {
 
 void Player::jump() {
 	if (this->_grounded) {
-		this->_dy = 0;
+		this->_dy = 0.0f;
 		this->_dy -= player_constants::JUMP_SPEED;
 		this->_grounded = false;
 	}
@@ -132,7 +132,7 @@ void Player::jump() {
 void Player::lookUp() {
 	// UNUSED
 	this->_lookingUp = true;
-	if (this->_dx == 0) {
+	if (this->_dx == 0.0f) {
 		this->playAnimation(this->_facing == RIGHT ? "IdleRightUp" : "IdleLeftUp");
 	}
 	else {
@@ -179,22 +179,22 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others) {
 		if (collisionSide != sides::NONE) {
 			switch (collisionSide) {
 				case sides::LEFT :
-					this->_x = (float) (others.at(i).getRight() + 1);
+					this->_x =	(others.at(i).getRight() + 1);
 					break;
 				case sides::RIGHT :
-					this->_x = (float) (others.at(i).getLeft() - this->_boundingBox.getWidth() - 1);
+					this->_x = (others.at(i).getLeft() - this->_boundingBox.getWidth() - 1);
 					break;
 				case sides::TOP :
-					this->_dy = 0;
-					this->_y = (float)(others.at(i).getBottom() + 1);
+					this->_dy = 0.0f;
+					this->_y = (others.at(i).getBottom() + 1);
 					if (this->_grounded) {
-						this->_dx = 0;
-						this->_x -= (this->_facing == RIGHT ? 1.0f : -1.0f);
+						this->_dx = 0.0f;
+						this->_x -= (this->_facing == RIGHT ? 1 : -1);
 					}
 					break;
 				case sides::BOTTOM :
-					this->_y = (float) (others.at(i).getTop() - this->_boundingBox.getHeight() - 1);
-					this->_dy = 0;
+					this->_y = (others.at(i).getTop() - this->_boundingBox.getHeight() - 1);
+					this->_dy = 0.0f;
 					this->_grounded = true;
 					break;
 			}
@@ -218,13 +218,13 @@ void Player::handleSlopeCollisions(std::vector<Slope> &others) {
 
 		// Re-position the player to the correct y
 		if (this->_grounded) {
-			this->_y = (float) (newY - this->_boundingBox.getHeight());
+			this->_y = (newY - this->_boundingBox.getHeight());
 			this->_grounded = true;
 		}
 	}
 }
 
-void Player::update(float elapsedTime) {
+void Player::update(int elapsedTime) {
 	// Apply gravity
 	if (this->_dy <= player_constants::GRAVITY_CAP) {
 		this->_dy += player_constants::GRAVITY * elapsedTime;
@@ -235,16 +235,16 @@ void Player::update(float elapsedTime) {
 	this->_previousY = this->_y;
 
 	// Move by dx
-	this->_x += this->_dx * elapsedTime;
+	this->_x += (int) (this->_dx * elapsedTime);
 
 	// Move by dy
-	this->_y += this->_dy * elapsedTime;
+	this->_y += (int) (this->_dy * elapsedTime);
 
 	AnimatedSprite::update(elapsedTime);
 }
 
 void Player::draw(GraphicalOctopus &graphics) {
-	AnimatedSprite::draw(graphics, (int)(this->_x), (int)(this->_y));
+	AnimatedSprite::draw(graphics, (this->_x), (this->_y));
 }
 
 const int Player::getId() const {

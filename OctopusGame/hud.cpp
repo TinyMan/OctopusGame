@@ -16,7 +16,7 @@ HUD::HUD(GraphicalOctopus &graphics, Player &player) {
 	this->_currentHealthBar = Sprite(graphics, "Content/Sprites/TextBox.png", 0, 25, 39, 5, 83, 72);
 }
 
-void HUD::update(float elapsedTime) {
+void HUD::update(int elapsedTime) {
 	/* TODO: re-do HUD
 	this->_healthNumber.setSourceRectX(8 * this->_player.getCurrentHealth());
 

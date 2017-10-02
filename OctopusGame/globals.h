@@ -5,8 +5,8 @@ namespace globals {
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 480;
 
-	const float TILE_SCALE = 2.0f;
-	const float SPRITE_SCALE = 1.0f;
+	const int TILE_SCALE = 2;
+	const int SPRITE_SCALE = 1;
 }
 
 namespace sides {

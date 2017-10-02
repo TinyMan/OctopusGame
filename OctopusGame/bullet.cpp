@@ -10,7 +10,7 @@ Bullet::Bullet() {
 }
 
 Bullet::Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing, float speed) :
-	AnimatedSprite(graphics, "Content/Sprites/BulletV1.png", 0, 0, 10, 10, (float)spawnPoint.x, (float)spawnPoint.y, 100),
+	AnimatedSprite(graphics, "Content/Sprites/BulletV1.png", 0, 0, 10, 10, spawnPoint.x, spawnPoint.y, 100),
 	_facing(facing),
 	_speed(speed)
 {
@@ -35,12 +35,12 @@ void Bullet::draw(GraphicalOctopus &graphics) {
 	AnimatedSprite::draw(graphics, (int)(this->_x), (int)(this->_y));
 }
 
-void Bullet::update(float elapsedTime) {
+void Bullet::update(int elapsedTime) {
 	if (_facing == RIGHT) {
-		this->_x += _speed * elapsedTime;
+		this->_x += (int)(_speed * elapsedTime);
 	}
 	else {
-		this->_x -= _speed * elapsedTime;
+		this->_x -= (int)(_speed * elapsedTime);
 	}
 
 	AnimatedSprite::update(elapsedTime);

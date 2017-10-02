@@ -20,7 +20,7 @@ public:
 	Level();
 	Level(std::string mapName, Vector2 spawnPoint, GraphicalOctopus &graphics);
 	~Level();
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 	void draw(GraphicalOctopus &graphics);
 
 	std::vector<Rectangle> checkTileCollision(Player &player);

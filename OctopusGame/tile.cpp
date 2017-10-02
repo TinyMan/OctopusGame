@@ -18,7 +18,7 @@ Tile::Tile(SDL_Texture* tileset, Vector2 size, Vector2 tilesetPosition, Vector2 
 
 }
 
-void Tile::update(float elapsedTime) {
+void Tile::update(int elapsedTime) {
 
 }
 

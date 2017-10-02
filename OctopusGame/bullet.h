@@ -13,7 +13,7 @@ public:
 	Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing, float speed);
 	Bullet(GraphicalOctopus &graphics, Player &player, float speed);
 	void draw(GraphicalOctopus &graphics);
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 
 	virtual void animationDone(std::string currentAnimation);
 	virtual void setupAnimations();

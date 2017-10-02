@@ -13,7 +13,7 @@ class Sprite {
 public:
 	Sprite();
 	Sprite(GraphicalOctopus &graphics, const std::string &filePath, int sourceX, int sourceY,
-		int width, int height, float posX, float posY);
+		int width, int height, int posX, int posY);
 	virtual ~Sprite();
 	virtual void update();
 	void draw(GraphicalOctopus &graphics, int x, int y);
@@ -21,8 +21,8 @@ public:
 	const Rectangle getBoundingBox() const;
 	const sides::Side getCollisionSide(Rectangle &other) const;
 
-	const float getX() const;
-	const float getY() const;
+	const int getX() const;
+	const int getY() const;
 
 	void setSourceRectX(int value);
 	void setSourceRectY(int value);
@@ -32,7 +32,7 @@ public:
 protected:
 	SDL_Rect _sourceRect;
 	SDL_Texture* _spriteSheet;
-	float _x, _y;
+	int _x, _y;
 
 	Rectangle _boundingBox;
 };

@@ -134,7 +134,7 @@ void Game::gameLoop() {
 
 		const auto delta = now - updatedTime;
 		if (delta > MAX_FRAME_TIME) {
-			this->update((float)MAX_FRAME_TIME);
+			this->update(MAX_FRAME_TIME);
 			this->draw(graphics);
 			updatedTime += MAX_FRAME_TIME;
 		}
@@ -170,7 +170,7 @@ void Game::draw(GraphicalOctopus &graphics) {
 	graphics.flip();
 }
 
-void Game::update(float elapsedTime) {
+void Game::update(int elapsedTime) {
 
 	// Updating players position
 	for (int i = 0; i < (int)this->_players.size(); i++) {

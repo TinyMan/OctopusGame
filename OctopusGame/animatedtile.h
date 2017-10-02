@@ -10,7 +10,7 @@ class GraphicalOctopus;
 class AnimatedTile : public Tile {
 public:
 	AnimatedTile(std::vector<Vector2> tilesetPositions, float duration, SDL_Texture* tileset, Vector2 size, Vector2 position);
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 	void draw(GraphicalOctopus &graphics);
 protected:
 	float _amountOfTime = 0;

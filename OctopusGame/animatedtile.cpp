@@ -15,10 +15,10 @@ AnimatedTile::AnimatedTile(std::vector<Vector2> tilesetPositions, float duration
 
 }
 
-void AnimatedTile::update(float elapsedTime) {
+void AnimatedTile::update(int elapsedTime) {
 	// Timer code
 	if (this->_amountOfTime <= 0) {
-		if (this->_tileToDraw == this->_tilesetPositions.size() - 1) {
+		if (this->_tileToDraw == (int)this->_tilesetPositions.size() - 1) {
 			this->_tileToDraw = 0;
 		}
 		else {
@@ -35,7 +35,7 @@ void AnimatedTile::update(float elapsedTime) {
 
 void AnimatedTile::draw(GraphicalOctopus &graphics) {
 	SDL_Rect destRect = { this->_position.x, this->_position.y,
-			(int)(this->_size.x * globals::TILE_SCALE), (int)(this->_size.y * globals::TILE_SCALE) };
+			(this->_size.x * globals::TILE_SCALE), (this->_size.y * globals::TILE_SCALE) };
 	SDL_Rect sourceRect = { this->_tilesetPositions.at(this->_tileToDraw).x, this->_tilesetPositions.at(this->_tileToDraw).y,
 			this->_size.x, this->_size.y};
 	graphics.blitSurface(this->_tileset, &sourceRect, &destRect);

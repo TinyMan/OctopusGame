@@ -13,21 +13,21 @@ class AnimatedSprite : public Sprite {
 public:
 	AnimatedSprite();
 	AnimatedSprite(GraphicalOctopus &graphics, const std::string filePath, int sourceX, int sourceY,
-		int width, int height, float posX, float posY, float timeToUpdate);
+		int width, int height, int posX, int posY, int timeToUpdate);
 
 	// Plays the animation by name if it is not already playing
 	// Can be played once or looped by default
 	void playAnimation(std::string animation, bool once = false);
 
 	// Updates the animated sprite (timer)
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 
 	// Draws the sprite on the screen
 	void draw(GraphicalOctopus &graphics, int x, int y);
 
 
 protected:
-	double _timeToUpdate;
+	int _timeToUpdate;
 	bool _currentAnimationOnce;
 	std::string _currentAnimation;
 
@@ -54,7 +54,7 @@ private:
 	std::map<std::string, Vector2> _offsets;
 
 	int _frameIndex;
-	double _timeElapsed;
+	int _timeElapsed;
 	bool _visible;
 };
 

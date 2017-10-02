@@ -15,7 +15,7 @@ public:
 private:
 	void gameLoop();
 	void draw(GraphicalOctopus &graphics);
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 
 	std::vector<Player> _players;
 

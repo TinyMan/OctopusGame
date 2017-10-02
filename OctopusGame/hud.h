@@ -11,7 +11,7 @@ public:
 	HUD();
 	HUD(GraphicalOctopus &graphics, Player &player);
 
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 	void draw(GraphicalOctopus &graphics);
 
 private:

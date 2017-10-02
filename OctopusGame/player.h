@@ -12,7 +12,7 @@ public:
 	Player();
 	Player(GraphicalOctopus &graphics,  Vector2 spawnPoint);
 	void draw(GraphicalOctopus &graphics);
-	void update(float elapsedTime);
+	void update(int elapsedTime);
 
 	// Movement functions
 	void moveLeft();
@@ -43,10 +43,10 @@ public:
 
 	// Getters :
 	const int getId() const;
-	const float getX() const;
-	const float getY() const;
-	const float getPreviousX() const;
-	const float getPreviousY() const;
+	const int getX() const;
+	const int getY() const;
+	const int getPreviousX() const;
+	const int getPreviousY() const;
 	const Direction getFacing() const;
 	const int getMaxHealth() const;
 	const int getCurrentHealth() const;
@@ -56,7 +56,7 @@ private:
 	static int _numberOfPlayers;
 
 	float _dx, _dy;
-	float _previousX, _previousY;
+	int _previousX, _previousY;
 	Direction _facing;
 
 	bool _grounded;

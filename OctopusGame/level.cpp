@@ -316,7 +316,7 @@ pLayer = pLayer->NextSiblingElement("layer");
 
 }
 
-void Level::update(float elapsedTime) {
+void Level::update(int elapsedTime) {
 	for (int i = 0; i < (int)this->_animatedTileList.size(); i++) {
 		this->_animatedTileList.at(i).update(elapsedTime);
 	}

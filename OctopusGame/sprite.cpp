@@ -11,7 +11,7 @@ Sprite::Sprite() {
 }
 
 Sprite::Sprite(GraphicalOctopus &graphics, const std::string &filePath, int sourceX, int sourceY,
-	int width, int height, float posX, float posY) :
+	int width, int height, int posX, int posY) :
 	_x(posX),
 	_y(posY)
 {
@@ -26,8 +26,8 @@ Sprite::Sprite(GraphicalOctopus &graphics, const std::string &filePath, int sour
 		printf("Error : Unable to load image\n");
 	}
 
-	this->_boundingBox = Rectangle((int)this->_x, (int)this->_y, (int)(width * globals::SPRITE_SCALE), 
-		(int)(height * globals::SPRITE_SCALE));
+	this->_boundingBox = Rectangle(this->_x, this->_y, (width * globals::SPRITE_SCALE), 
+		(height * globals::SPRITE_SCALE));
 }
 
 Sprite::~Sprite() {
@@ -35,14 +35,14 @@ Sprite::~Sprite() {
 }
 
 void Sprite::draw(GraphicalOctopus &graphics, int x, int y) {
-	SDL_Rect destinationRectangle = { x, y, (int)(this->_sourceRect.w * globals::SPRITE_SCALE), 
-		(int)(this->_sourceRect.h * globals::SPRITE_SCALE) };
+	SDL_Rect destinationRectangle = { x, y, (this->_sourceRect.w * globals::SPRITE_SCALE), 
+		(this->_sourceRect.h * globals::SPRITE_SCALE) };
 	graphics.blitSurface(_spriteSheet, &this->_sourceRect, &destinationRectangle);
 }
 
 void Sprite::update() {
-	this->_boundingBox = Rectangle((int)this->_x, (int)this->_y, (int)(this->_sourceRect.w * globals::SPRITE_SCALE), 
-		(int)(this->_sourceRect.h * globals::SPRITE_SCALE));
+	this->_boundingBox = Rectangle(this->_x, this->_y, (this->_sourceRect.w * globals::SPRITE_SCALE), 
+		(this->_sourceRect.h * globals::SPRITE_SCALE));
 }
 
 const Rectangle Sprite::getBoundingBox() const {
@@ -73,11 +73,11 @@ const sides::Side Sprite::getCollisionSide(Rectangle &other) const {
 		sides::NONE;
 }
 
-const float Sprite::getX() const {
+const int Sprite::getX() const {
 	return this->_x;
 }
 
-const float Sprite::getY() const {
+const int Sprite::getY() const {
 	return this->_y;
 }
 
