@@ -18,7 +18,7 @@ public:
 	virtual void animationDone(std::string currentAnimation);
 	virtual void setupAnimations();
 
-	const Player getPlayer() const;
+	const Player& getPlayer() const;
 
 	// handle collisions with tiles and players
 protected:

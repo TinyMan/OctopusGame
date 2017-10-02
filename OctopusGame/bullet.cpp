@@ -37,10 +37,10 @@ void Bullet::draw(GraphicalOctopus &graphics) {
 
 void Bullet::update(float elapsedTime) {
 	if (_facing == RIGHT) {
-		this->_x += _speed;
+		this->_x += _speed * elapsedTime;
 	}
 	else {
-		this->_x -= _speed;
+		this->_x -= _speed * elapsedTime;
 	}
 
 	AnimatedSprite::update(elapsedTime);
@@ -55,6 +55,6 @@ void Bullet::setupAnimations() {
 	this->addAnimation(1, 1, 0, "BulletLeft", 9, 9 , Vector2(0, 0));
 }
 
-const Player Bullet::getPlayer() const {
+const Player& Bullet::getPlayer() const {
 	return this->_player;
 }
