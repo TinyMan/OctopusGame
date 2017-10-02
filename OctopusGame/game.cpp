@@ -11,8 +11,8 @@
 #include <iostream>
 
 namespace {
-	const int FPS = 50;
-	const int MAX_FRAME_TIME = 1000 / FPS;
+	const Uint32 FPS = 50;
+	const Uint32 MAX_FRAME_TIME = 1000 / FPS;
 }
 
 // Constructor
@@ -40,11 +40,12 @@ void Game::gameLoop() {
 
 	this->_hud = HUD(graphics, this->_players.at(1));
 
-	int LAST_UPDATE_TIME = SDL_GetTicks();
+	int updatedTime = 0;
 
 	// Start of the game loop
 	while (true) {
 		input.beginNewFrame();
+		const Uint32 now = SDL_GetTicks();
 
 		if (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT)
@@ -65,19 +66,19 @@ void Game::gameLoop() {
 
 		// Moving left and right
 		//		- first player
-			if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
-				this->_players.at(0).moveLeft();
-			}
-			else if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
-				this->_players.at(0).moveRight();
-			}
+		if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
+			this->_players.at(0).moveLeft();
+		}
+		else if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
+			this->_players.at(0).moveRight();
+		}
 		//		- second player
-			if (input.isKeyHeld(SDL_SCANCODE_A)) {
-				this->_players.at(1).moveLeft();
-			}
-			else if (input.isKeyHeld(SDL_SCANCODE_D)) {
-				this->_players.at(1).moveRight();
-			}
+		if (input.isKeyHeld(SDL_SCANCODE_A)) {
+			this->_players.at(1).moveLeft();
+		}
+		else if (input.isKeyHeld(SDL_SCANCODE_D)) {
+			this->_players.at(1).moveRight();
+		}
 
 		//////////////// TODO: remove, UNUSED ////////////////////////////////////////
 		// Looking up
@@ -97,29 +98,29 @@ void Game::gameLoop() {
 
 		// Dropping down and jumping
 		//		- first player
-			if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
-				this->_players.at(0).dropDown();
-			} 
-			else if (input.wasKeyPressed(SDL_SCANCODE_UP)) {
-				this->_players.at(0).jump();
-			}
+		if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
+			this->_players.at(0).dropDown();
+		}
+		else if (input.wasKeyPressed(SDL_SCANCODE_UP)) {
+			this->_players.at(0).jump();
+		}
 		//		- second player
-			if (input.wasKeyPressed(SDL_SCANCODE_S) || input.isKeyHeld(SDL_SCANCODE_S)) {
-				this->_players.at(1).dropDown();
-			}
-			else if (input.wasKeyPressed(SDL_SCANCODE_W)) {
-				this->_players.at(1).jump();
-			}
+		if (input.wasKeyPressed(SDL_SCANCODE_S) || input.isKeyHeld(SDL_SCANCODE_S)) {
+			this->_players.at(1).dropDown();
+		}
+		else if (input.wasKeyPressed(SDL_SCANCODE_W)) {
+			this->_players.at(1).jump();
+		}
 
 		// Firing weapon
 		//		- first player
-			if (input.isKeyHeld(SDL_SCANCODE_KP_4)) {
-				this->_bullets.push_back(Bullet(graphics, this->_players.at(0), 0.2f));
-			}
+		if (input.isKeyHeld(SDL_SCANCODE_KP_4)) {
+			this->_bullets.push_back(Bullet(graphics, this->_players.at(0), 0.2f));
+		}
 		//		- second player
-			if (input.wasKeyPressed(SDL_SCANCODE_G)) {
-				this->_bullets.push_back(Bullet(graphics, this->_players.at(1), 0.2f));
-			}
+		if (input.isKeyHeld(SDL_SCANCODE_G)) {
+			this->_bullets.push_back(Bullet(graphics, this->_players.at(1), 0.2f));
+		}
 
 		// Stop motion
 		//		- first player
@@ -131,12 +132,16 @@ void Game::gameLoop() {
 			this->_players.at(1).stopMoving();
 		}
 
-		const int CURRENT_TIME_MS = SDL_GetTicks();
-		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-		this->update((float)(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME)));
-		LAST_UPDATE_TIME = CURRENT_TIME_MS;
+		const auto delta = now - updatedTime;
+		if (delta > MAX_FRAME_TIME) {
+			this->update((float)MAX_FRAME_TIME);
+			this->draw(graphics);
+			updatedTime += MAX_FRAME_TIME;
+		}
+		else
+			SDL_Delay(MAX_FRAME_TIME - delta);
 
-		this->draw(graphics);
+
 	} // End of the game loop
 }
 
@@ -185,7 +190,7 @@ void Game::update(float elapsedTime) {
 
 	// Updating the HUD
 	this->_hud.update(elapsedTime);
-	
+
 	// Check players collisions with tiles
 	for (int i = 0; i < (int)this->_players.size(); i++) {
 		std::vector<Rectangle> others;
