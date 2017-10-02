@@ -101,14 +101,14 @@ void Game::gameLoop() {
 		if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
 			this->_players.at(0).dropDown();
 		}
-		else if (input.wasKeyPressed(SDL_SCANCODE_UP)) {
+		else if (input.wasKeyPressed(SDL_SCANCODE_UP) || input.isKeyHeld(SDL_SCANCODE_UP)) {
 			this->_players.at(0).jump();
 		}
 		//		- second player
 		if (input.wasKeyPressed(SDL_SCANCODE_S) || input.isKeyHeld(SDL_SCANCODE_S)) {
 			this->_players.at(1).dropDown();
 		}
-		else if (input.wasKeyPressed(SDL_SCANCODE_W)) {
+		else if (input.wasKeyPressed(SDL_SCANCODE_W) || input.isKeyHeld(SDL_SCANCODE_W)) {
 			this->_players.at(1).jump();
 		}
 
@@ -220,9 +220,10 @@ void Game::update(float elapsedTime) {
 		}
 	}
 
+	std::sort(indexesToErase.begin(), indexesToErase.end());
 	// Erase all bullets that touched a player
 	for (int i = 0; i < (int)indexesToErase.size(); i++) {
-		this->_bullets.erase(this->_bullets.begin() + indexesToErase.at(i) - i);
+		this->_bullets.erase(this->_bullets.begin() + (indexesToErase.at(i) - i));
 	}
 
 
