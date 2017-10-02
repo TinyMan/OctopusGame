@@ -13,7 +13,7 @@ public:
 
 	// Loads an image into the _spriteSheets map if it doesn't already exist, so that each image will only
 	// be loaded once. Returns the image in both cases.
-	SDL_Surface* loadImage(const std::string &filePath);
+	SDL_Texture* loadImage(const std::string &filePath);
 
 	// Draws the texture to a certain part of the screen
 	void blitSurface(SDL_Texture* texture, SDL_Rect* sourceRectangle, SDL_Rect* destinationRectangle);
@@ -31,7 +31,7 @@ private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 
-	std::map<std::string, SDL_Surface*> _spriteSheets;
+	std::map<std::string, SDL_Texture*> _spriteSheets;
 
 	Uint32 _frameStart = 0;
 	Uint32 _nbFrames = 0;

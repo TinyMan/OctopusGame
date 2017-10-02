@@ -22,9 +22,9 @@ GraphicalOctopus::~GraphicalOctopus() {
 
 // Loads an image into the _spriteSheets map if it doesn't already exist, so that each image will only
 // be loaded once. Returns the image in both cases.
-SDL_Surface* GraphicalOctopus::loadImage(const std::string &filePath) {
+SDL_Texture* GraphicalOctopus::loadImage(const std::string &filePath) {
 	if (this->_spriteSheets.count(filePath) == 0) {
-		this->_spriteSheets[filePath] = IMG_Load(filePath.c_str());
+		this->_spriteSheets[filePath] = SDL_CreateTextureFromSurface(this->getRenderer(), IMG_Load(filePath.c_str()));
 	}
 	return this->_spriteSheets[filePath];	
 }
