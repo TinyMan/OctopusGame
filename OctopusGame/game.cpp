@@ -184,7 +184,7 @@ void Game::update(int elapsedTime) {
 	for (int i = 0; i < (int)this->_bullets.size(); i++) {
 		this->_bullets.at(i).update(elapsedTime);
 		if (this->_bullets.at(i).getX() > globals::SCREEN_WIDTH || this->_bullets.at(i).getX() < 0) {
-			this->_bullets.erase(this->_bullets.begin() + i);
+			this->_bullets.erase(this->_bullets.begin() + i--);
 		}
 	}
 
@@ -200,13 +200,11 @@ void Game::update(int elapsedTime) {
 		}
 	}
 
-	std::vector<int> indexesToErase;
-
 	// Check projectile collisions with tiles
 	for (int i = 0; i < (int)this->_bullets.size(); i++) {
 		std::vector<Rectangle> others;
 		if ((others = this->_level.checkBulletCollision(this->_bullets.at(i).getBoundingBox())).size() > 0) {
-			indexesToErase.push_back(i);
+			this->_bullets.erase(this->_bullets.begin() + i--);
 		}
 	}
 
@@ -218,17 +216,11 @@ void Game::update(int elapsedTime) {
 				// TODO: remove all forces except blast if exists ?
 				this->_players.at(j)._forces.clear();
 				this->_players.at(j)._forces.push_back(this->_bullets.at(i).getForce());
-				indexesToErase.push_back(i);
+				this->_bullets.erase(this->_bullets.begin() + i--);
+				break;
 			}
 		}
 	}
-
-	std::sort(indexesToErase.begin(), indexesToErase.end());
-	// Erase all bullets that touched a player
-	for (int i = 0; i < (int)indexesToErase.size(); i++) {
-		this->_bullets.erase(this->_bullets.begin() + (indexesToErase.at(i) - i));
-	}
-
 
 	// Check player collisions with slopes
 	for (int i = 0; i < (int)this->_players.size(); i++) {
