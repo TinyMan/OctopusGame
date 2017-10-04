@@ -19,8 +19,6 @@ private:
 
 	std::vector<Player> _players;
 
-	Player _player;
-	Player _player2;
 	Level _level;
 	std::vector<Bullet> _bullets;
 

@@ -4,11 +4,15 @@
 #include "animatedsprite.h"
 #include "globals.h"
 #include "slope.h"
+#include <vector>
 
 class GraphicalOctopus;
 
 class Player : public AnimatedSprite {
 public:
+
+	std::vector<Force> _forces;
+
 	Player();
 	Player(GraphicalOctopus &graphics,  Vector2 spawnPoint);
 	void draw(GraphicalOctopus &graphics);
@@ -41,6 +45,9 @@ public:
 	void handleTileCollisions(std::vector<Rectangle> &others);
 	void handleSlopeCollisions(std::vector<Slope> &others);
 
+	// Add a force to the player
+	void addForce(Force f);
+
 	// Getters :
 	const int getId() const;
 	const int getX() const;
@@ -50,6 +57,7 @@ public:
 	const Direction getFacing() const;
 	const int getMaxHealth() const;
 	const int getCurrentHealth() const;
+	const Force getSumOfAllForces(int elapsedTime);
 
 private:
 	int _id;
@@ -61,8 +69,10 @@ private:
 
 	bool _grounded;
 
+	// TODO : remove
 	bool _lookingUp, _lookingDown;
 
+	// TODO: remove
 	int _maxHealth, _currentHealth;
 };
 

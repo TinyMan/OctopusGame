@@ -24,11 +24,18 @@ Bullet::Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing,
 	}
 }
 
-Bullet::Bullet(GraphicalOctopus &graphics, Player &player, float speed) :
+Bullet::Bullet(GraphicalOctopus &graphics, Player &player, float speed, Force force) :
 	Bullet(graphics, Vector2((int)(player.getX() + player.getBoundingBox().getWidth()/2), 
 	(int)(player.getY() + player.getBoundingBox().getHeight()/2)), player.getFacing(), speed)
 {
 	this->_player = player;
+	if (this->_facing == RIGHT) {
+		force.direction = Vector2f(1.0f * force.power, 0.0f);
+	}
+	else {
+		force.direction = Vector2f(-1.0f * force.power, 0.0f);
+	}
+	this->_force = force;
 }
 
 void Bullet::draw(GraphicalOctopus &graphics) {
@@ -57,4 +64,8 @@ void Bullet::setupAnimations() {
 
 const Player& Bullet::getPlayer() const {
 	return this->_player;
+}
+
+Force Bullet::getForce() const {
+	return this->_force;
 }

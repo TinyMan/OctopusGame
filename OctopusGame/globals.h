@@ -7,6 +7,8 @@ namespace globals {
 
 	const int TILE_SCALE = 2;
 	const int SPRITE_SCALE = 1;
+
+	const float FORCE_REDUCTION = 2.0f / 3.0f;
 }
 
 namespace sides {
@@ -43,9 +45,30 @@ struct Vector2 {
 		x(0), y(0) {}
 	Vector2(int x, int y) :
 		x(x), y(y) {}
+};
 
-	Vector2 zero() {
-		return Vector2(0, 0);
+struct Vector2f {
+	float x;
+	float y;
+
+	Vector2f() :
+		x(0), y(0) {}
+	Vector2f(float x, float y) :
+		x(x), y(y) {}
+};
+
+struct Force {
+	Vector2f direction;
+	float power;
+	int timeLeft;
+
+	Force() :
+	power(0), direction(Vector2f(0.0f, 0.0f)), timeLeft(0) {}
+
+	Force(float power, int timeLeft) :
+		power(power), timeLeft(timeLeft) 
+	{
+		direction = Vector2f(0.0f, 0.0f);
 	}
 };
 

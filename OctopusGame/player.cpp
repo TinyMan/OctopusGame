@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "player.h"
 #include "graphics.h"
-#include "animatedsprite.h"
+#include <algorithm>
 
 namespace player_constants {
 	const float WALK_SPEED = 0.2f;
@@ -86,8 +86,33 @@ const int Player::getCurrentHealth() const {
 	return this->_currentHealth;
 }
 
+const Force Player::getSumOfAllForces(int elapsedTime) {
+	std::vector<int> indexesToErase;
+	Force f = Force(0, 0);
+	for (int i = 0; i < (int)this->_forces.size(); i++) {
+		if (this->_forces.at(i).timeLeft <= 0) {
+			indexesToErase.push_back(i);
+		}
+		else {
+			f.direction.x += this->_forces.at(i).direction.x;
+			f.direction.y += this->_forces.at(i).direction.y;
+
+			// Subtracting the time that passed from the Force
+			this->_forces.at(i).timeLeft -= elapsedTime;
+		}
+	}
+
+	// Clean up all the Forces that have run out
+	std::sort(indexesToErase.begin(), indexesToErase.end());
+	for (int i = 0; i < (int)indexesToErase.size(); i++) {
+		this->_forces.erase(this->_forces.begin() + (indexesToErase.at(i) - i));
+	}
+
+	return f;
+}
+
 void Player::moveLeft() {
-	if(this->_lookingDown && this->_grounded) {
+	if (this->_lookingDown && this->_grounded) {
 		return;
 	}
 	this->_dx = -player_constants::WALK_SPEED;
@@ -130,7 +155,7 @@ void Player::jump() {
 }
 
 void Player::lookUp() {
-	// UNUSED
+	// TODO: remove UNUSED
 	this->_lookingUp = true;
 	if (this->_dx == 0.0f) {
 		this->playAnimation(this->_facing == RIGHT ? "IdleRightUp" : "IdleLeftUp");
@@ -141,13 +166,13 @@ void Player::lookUp() {
 }
 
 void Player::stopLookingUp() {
-	// UNUSED
+	// TODO: remove UNUSED
 	this->_lookingUp = false;
 }
 
 
 void Player::lookDown() {
-	// UNUSED
+	// TODO: remove UNUSED
 	this->_lookingDown = true;
 	if (this->_grounded) {
 		// We need to interact and turn backwards
@@ -167,7 +192,7 @@ void Player::dropDown() {
 }
 
 void Player::stopLookingDown() {
-	// UNUSED
+	// TODO : remove UNUSED
 	this->_lookingDown = false;
 }
 
@@ -178,11 +203,19 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others) {
 		sides::Side collisionSide = Sprite::getCollisionSide(others.at(i));
 		if (collisionSide != sides::NONE) {
 			switch (collisionSide) {
-				case sides::LEFT :
-					this->_x =	(others.at(i).getRight() + 1);
+				case sides::LEFT:
+					this->_x = (others.at(i).getRight() + 1);
+					for (int i = 0; i < (int)this->_forces.size(); i++) {
+						if (this->_forces.at(i).direction.x <= 0.0f)
+							this->_forces.at(i).direction.x = - this->_forces.at(i).direction.x * globals::FORCE_REDUCTION;
+					}
 					break;
 				case sides::RIGHT :
 					this->_x = (others.at(i).getLeft() - this->_boundingBox.getWidth() - 1);
+					for (int i = 0; i < (int)this->_forces.size(); i++) {
+						if (this->_forces.at(i).direction.x >= 0.0f)
+							this->_forces.at(i).direction.x = - this->_forces.at(i).direction.x * globals::FORCE_REDUCTION;
+					}
 					break;
 				case sides::TOP :
 					this->_dy = 0.0f;
@@ -191,11 +224,21 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others) {
 						this->_dx = 0.0f;
 						this->_x -= (this->_facing == RIGHT ? 1 : -1);
 					}
+
+					for (int i = 0; i < (int)this->_forces.size(); i++) {
+						if (this->_forces.at(i).direction.y <= 0.0f)
+							this->_forces.at(i).direction.y = - this->_forces.at(i).direction.y * globals::FORCE_REDUCTION;
+					}
 					break;
 				case sides::BOTTOM :
 					this->_y = (others.at(i).getTop() - this->_boundingBox.getHeight() - 1);
 					this->_dy = 0.0f;
 					this->_grounded = true;
+
+					for (int i = 0; i < (int)this->_forces.size(); i++) {
+						if (this->_forces.at(i).direction.y >= 0.0f)
+							this->_forces.at(i).direction.y = - this->_forces.at(i).direction.y * globals::FORCE_REDUCTION;
+					}
 					break;
 			}
 		}
@@ -234,11 +277,18 @@ void Player::update(int elapsedTime) {
 	this->_previousX = this->_x;
 	this->_previousY = this->_y;
 
+	// Compute the force applied on the player
+	Force allForces = getSumOfAllForces(elapsedTime);
+
 	// Move by dx
 	this->_x += (int) (this->_dx * elapsedTime);
 
 	// Move by dy
 	this->_y += (int) (this->_dy * elapsedTime);
+
+	// Move by force
+	this->_x += (int) (allForces.direction.x * elapsedTime);
+	this->_y += (int) (allForces.direction.y * elapsedTime);
 
 	AnimatedSprite::update(elapsedTime);
 }
