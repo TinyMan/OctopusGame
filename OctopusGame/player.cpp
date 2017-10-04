@@ -87,11 +87,10 @@ const int Player::getCurrentHealth() const {
 }
 
 const Force Player::getSumOfAllForces(int elapsedTime) {
-	std::vector<int> indexesToErase;
 	Force f = Force(0, 0);
 	for (int i = 0; i < (int)this->_forces.size(); i++) {
 		if (this->_forces.at(i).timeLeft <= 0) {
-			indexesToErase.push_back(i);
+			this->_forces.erase(this->_forces.begin() + i--);
 		}
 		else {
 			f.direction.x += this->_forces.at(i).direction.x;
@@ -101,13 +100,6 @@ const Force Player::getSumOfAllForces(int elapsedTime) {
 			this->_forces.at(i).timeLeft -= elapsedTime;
 		}
 	}
-
-	// Clean up all the Forces that have run out
-	std::sort(indexesToErase.begin(), indexesToErase.end());
-	for (int i = 0; i < (int)indexesToErase.size(); i++) {
-		this->_forces.erase(this->_forces.begin() + (indexesToErase.at(i) - i));
-	}
-
 	return f;
 }
 
