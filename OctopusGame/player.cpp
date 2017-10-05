@@ -25,11 +25,7 @@ Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
 	_dx(0.0f),
 	_dy(0.0f),
 	_facing(RIGHT),
-	_grounded(false),
-	_lookingUp(false),
-	_lookingDown(false),
-	_maxHealth(3),
-	_currentHealth(3)
+	_grounded(false)
 {
 	this->_numberOfPlayers++;
 	this->_id = this->_numberOfPlayers;
@@ -44,14 +40,6 @@ void Player::setupAnimations() {
 	this->addAnimation(1, 0, 32, "IdleRight", 32, 32, Vector2(0, 0));
 	this->addAnimation(3, 0, 0, "RunLeft", 32, 32, Vector2(0, 0));
 	this->addAnimation(3, 0, 32, "RunRight", 32, 32, Vector2(0, 0));
-	this->addAnimation(1, 3, 0, "IdleLeftUp", 32, 32, Vector2(0,0));
-	this->addAnimation(1, 3, 32, "IdleRightUp", 32, 32, Vector2(0,0));
-	this->addAnimation(3, 3, 0, "RunLeftUp", 32, 32, Vector2(0,0));
-	this->addAnimation(3, 3, 32, "RunRightUp", 32, 32, Vector2(0,0));
-	this->addAnimation(1, 6, 0, "LookDownLeft", 32, 32, Vector2(0,0));
-	this->addAnimation(1, 6, 32, "LookDownRight", 32, 32, Vector2(0,0));
-	this->addAnimation(1, 7, 0, "LookBackwardsLeft", 32, 32, Vector2(0,0));
-	this->addAnimation(1, 7, 32, "LookBackwardsRight", 32, 32, Vector2(0, 0));
 }
 
 void Player::animationDone(std::string currentAnimation) {
@@ -78,14 +66,6 @@ const Direction Player::getFacing() const {
 	return this->_facing;
 }
 
-const int Player::getMaxHealth() const {
-	return this->_maxHealth;
-}
-
-const int Player::getCurrentHealth() const {
-	return this->_currentHealth;
-}
-
 const Force Player::getSumOfAllForces(int elapsedTime) {
 	Force f = Force(0, 0);
 	for (int i = 0; i < (int)this->_forces.size(); i++) {
@@ -104,38 +84,25 @@ const Force Player::getSumOfAllForces(int elapsedTime) {
 }
 
 void Player::moveLeft() {
-	if (this->_lookingDown && this->_grounded) {
-		return;
-	}
 	this->_dx = -player_constants::WALK_SPEED;
-	if (this->_lookingUp) {
-		this->playAnimation("RunLeftUp");
-	}
-	else {
-		this->playAnimation("RunLeft");
-	}
+	this->playAnimation("RunLeft");
 	this->_facing = LEFT;
 }
 
 void Player::moveRight() {
-	if (this->_lookingDown && this->_grounded) {
-		return;
-	}
 	this->_dx = player_constants::WALK_SPEED;
-	if (this->_lookingUp) {
-		this->playAnimation("RunRightUp");
-	}
-	else {
-		this->playAnimation("RunRight");
-	}
+	this->playAnimation("RunRight");
 	this->_facing = RIGHT;
 }
 
 void Player::stopMoving() {
 	this->_dx = 0.0f;
-	if (!this->_lookingUp && !this->_lookingDown) {
-		this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");
-	}
+	this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");	
+}
+
+void Player::moveTo(Vector2 position) {
+	this->_x = position.x;
+	this->_y = position.y;
 }
 
 void Player::jump() {
@@ -146,46 +113,11 @@ void Player::jump() {
 	}
 }
 
-void Player::lookUp() {
-	// TODO: remove UNUSED
-	this->_lookingUp = true;
-	if (this->_dx == 0.0f) {
-		this->playAnimation(this->_facing == RIGHT ? "IdleRightUp" : "IdleLeftUp");
-	}
-	else {
-		this->playAnimation(this->_facing == LEFT ? "RunRightUp" : "RunRightUp");
-	}
-}
-
-void Player::stopLookingUp() {
-	// TODO: remove UNUSED
-	this->_lookingUp = false;
-}
-
-
-void Player::lookDown() {
-	// TODO: remove UNUSED
-	this->_lookingDown = true;
-	if (this->_grounded) {
-		// We need to interact and turn backwards
-		this->playAnimation(this->_facing == RIGHT ? "LookBackwardsRight" : "LookBackwardsLeft");
-	}
-	else {
-		this->playAnimation(this->_facing == RIGHT ? "LookDownRight" : "LookDownLeft");
-	}
-}
-
-
 void Player::dropDown() {
 	if (this->_grounded) {
 		this->_y += 1;
 		this->_grounded = false;
 	}
-}
-
-void Player::stopLookingDown() {
-	// TODO : remove UNUSED
-	this->_lookingDown = false;
 }
 
 // Handle collisions with ALL tiles the player is colliding with
@@ -293,6 +225,14 @@ const int Player::getId() const {
 	return this->_id;
 }
 
-bool operator==(const Player &player1, const Player &bullet2) {
-	return (player1.getId() == bullet2.getId());
+void Player::addForce(Force f) {
+	this->_forces.push_back(f);
+}
+
+void Player::clearForces() {
+	this->_forces.clear();
+}
+
+bool operator==(const Player &player1, const Player &player2) {
+	return (player1.getId() == player2.getId());
 }

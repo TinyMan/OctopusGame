@@ -11,8 +11,6 @@ class GraphicalOctopus;
 class Player : public AnimatedSprite {
 public:
 
-	std::vector<Force> _forces;
-
 	Player();
 	Player(GraphicalOctopus &graphics,  Vector2 spawnPoint);
 	void draw(GraphicalOctopus &graphics);
@@ -22,15 +20,10 @@ public:
 	void moveLeft();
 	void moveRight();
 	void stopMoving();
+	void moveTo(Vector2 position);
 
 	// Starts jumping
 	void jump();
-
-	// Looking up or down
-	void lookUp();
-	void stopLookingUp();
-	void lookDown();
-	void stopLookingDown();
 
 	// Makes the player drop if he is on a platform (horizontal)
 	void dropDown();
@@ -47,6 +40,8 @@ public:
 
 	// Add a force to the player
 	void addForce(Force f);
+	// Clear all forces 
+	void clearForces();
 
 	// Getters :
 	const int getId() const;
@@ -55,8 +50,6 @@ public:
 	const int getPreviousX() const;
 	const int getPreviousY() const;
 	const Direction getFacing() const;
-	const int getMaxHealth() const;
-	const int getCurrentHealth() const;
 	const Force getSumOfAllForces(int elapsedTime);
 
 private:
@@ -69,11 +62,7 @@ private:
 
 	bool _grounded;
 
-	// TODO : remove
-	bool _lookingUp, _lookingDown;
-
-	// TODO: remove
-	int _maxHealth, _currentHealth;
+	std::vector<Force> _forces;
 };
 
 // Operators redefinition :

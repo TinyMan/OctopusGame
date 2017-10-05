@@ -279,10 +279,10 @@ pLayer = pLayer->NextSiblingElement("layer");
 
 						for (int i = 0; i < (int)points.size(); i += 2) {
 							this->_slopes.push_back(Slope(
-								Vector2((int)((p1.x + points.at(i < 2 ? i : i - 1).x) * globals::TILE_SCALE),
-								(int)((p1.y + points.at(i < 2 ? i : i - 1).y) * globals::TILE_SCALE)),
-								Vector2((int)((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::TILE_SCALE),
-								(int)((p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::TILE_SCALE))
+								Vector2(((p1.x + points.at(i < 2 ? i : i - 1).x) * globals::TILE_SCALE),
+								((p1.y + points.at(i < 2 ? i : i - 1).y) * globals::TILE_SCALE)),
+								Vector2(((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::TILE_SCALE),
+								((p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::TILE_SCALE))
 							));
 						}
 
@@ -344,8 +344,7 @@ std::vector<Rectangle> Level::checkTileCollision(Player &player) {
 
 	for (int i = 0; i < (int)this->_horizontalCollisionRects.size(); i++) {
 		if (this->_horizontalCollisionRects.at(i).collidesWith(other)
-			&& player.getPreviousY() + (32 * globals::SPRITE_SCALE) < this->_horizontalCollisionRects.at(i).getTop()) {
-			// TODO: remove 32 and put sprite size
+			&& player.getPreviousY() + (player.getBoundingBox().getHeight()	 * globals::SPRITE_SCALE) < this->_horizontalCollisionRects.at(i).getTop()) {
 			others.push_back(this->_horizontalCollisionRects.at(i));
 		}
 	}

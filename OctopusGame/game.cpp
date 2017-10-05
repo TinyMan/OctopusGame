@@ -80,22 +80,6 @@ void Game::gameLoop() {
 			this->_players.at(1).moveRight();
 		}
 
-		//////////////// TODO: remove, UNUSED ////////////////////////////////////////
-		// Looking up
-		if (input.isKeyHeld(SDL_SCANCODE_UP)) {
-			this->_players.at(0).lookUp();
-		}
-
-		// Stop looking up
-		if (input.wasKeyReleased(SDL_SCANCODE_UP)) {
-			this->_players.at(0).stopLookingUp();
-		}
-		// Stop looking down
-		if (input.wasKeyReleased(SDL_SCANCODE_DOWN)) {
-			this->_players.at(0).stopLookingDown();
-		}
-		//////////////// TODO: remove, UNUSED ////////////////////////////////////////
-
 		// Dropping down and jumping
 		//		- first player
 		if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
@@ -175,6 +159,8 @@ void Game::update(int elapsedTime) {
 	// Updating players position
 	for (int i = 0; i < (int)this->_players.size(); i++) {
 		this->_players.at(i).update(elapsedTime);
+		if (this->_players.at(i).getY() >= globals::SCREEN_HEIGHT + 100)
+			this->_players.at(i).moveTo(this->_level.getPlayerSpawnPoint());
 	}
 
 	// Updating the level (Animated level only)
@@ -212,10 +198,11 @@ void Game::update(int elapsedTime) {
 	for (int i = 0; i < (int)this->_bullets.size(); i++) {
 		for (int j = 0; j < (int)this->_players.size(); j++) {
 			if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
-				&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
+					&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
 				// TODO: remove all forces except blast if exists ?
-				this->_players.at(j)._forces.clear();
-				this->_players.at(j)._forces.push_back(this->_bullets.at(i).getForce());
+				this->_players.at(j).clearForces();
+
+				this->_players.at(j).addForce(this->_bullets.at(i).getForce());
 				this->_bullets.erase(this->_bullets.begin() + i--);
 				break;
 			}
