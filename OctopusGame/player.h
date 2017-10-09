@@ -43,6 +43,10 @@ public:
 	// Clear all forces 
 	void clearForces();
 
+	// Removes a life from the player
+	// Returns true if the life count is still > 0, false otherwise
+	bool loseALife();
+
 	// Getters :
 	const int getId() const;
 	const int getX() const;
@@ -51,9 +55,11 @@ public:
 	const int getPreviousY() const;
 	const Direction getFacing() const;
 	const Force getSumOfAllForces(int elapsedTime);
+	const int getLivesLeft() const;
 
 private:
 	int _id;
+	int _lives;
 	static int _numberOfPlayers;
 
 	float _dx, _dy;

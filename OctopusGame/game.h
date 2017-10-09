@@ -23,5 +23,6 @@ private:
 	std::vector<Bullet> _bullets;
 
 	HUD _hud;
+	bool _paused;
 };
 #endif // !GAME_H

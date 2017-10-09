@@ -18,6 +18,7 @@ namespace {
 // Constructor
 Game::Game() {
 	SDL_Init(SDL_INIT_EVERYTHING);
+	this->_paused = false;
 	this->gameLoop();
 }
 
@@ -38,7 +39,7 @@ void Game::gameLoop() {
 	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoint()));
 	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoint()));
 
-	this->_hud = HUD(graphics, this->_players.at(1));
+	this->_hud = HUD(graphics, &this->_players.at(0), &this->_players.at(1));	
 
 	int updatedTime = 0;
 
@@ -116,6 +117,11 @@ void Game::gameLoop() {
 			this->_players.at(1).stopMoving();
 		}
 
+		// Pause/Unpause the game
+		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
+			this->_paused = !this->_paused;
+		}
+
 		const auto delta = now - updatedTime;
 		if (delta > MAX_FRAME_TIME) {
 			this->update(MAX_FRAME_TIME);
@@ -155,65 +161,70 @@ void Game::draw(GraphicalOctopus &graphics) {
 }
 
 void Game::update(int elapsedTime) {
-
-	// Updating players position
-	for (int i = 0; i < (int)this->_players.size(); i++) {
-		this->_players.at(i).update(elapsedTime);
-		if (this->_players.at(i).getY() >= globals::SCREEN_HEIGHT + 100)
-			this->_players.at(i).moveTo(this->_level.getPlayerSpawnPoint());
-	}
-
-	// Updating the level (Animated level only)
-	this->_level.update(elapsedTime);
-
-	// Updating bullet position and destroy them if they're out of bound
-	for (int i = 0; i < (int)this->_bullets.size(); i++) {
-		this->_bullets.at(i).update(elapsedTime);
-		if (this->_bullets.at(i).getX() > globals::SCREEN_WIDTH || this->_bullets.at(i).getX() < 0) {
-			this->_bullets.erase(this->_bullets.begin() + i--);
-		}
-	}
-
-	// Updating the HUD
-	this->_hud.update(elapsedTime);
-
-	// Check players collisions with tiles
-	for (int i = 0; i < (int)this->_players.size(); i++) {
-		std::vector<Rectangle> others;
-		if ((others = this->_level.checkTileCollision(this->_players.at(i))).size() > 0) {
-			// If the player is colliding with at least one tile, handle it	
-			this->_players.at(i).handleTileCollisions(others);
-		}
-	}
-
-	// Check projectile collisions with tiles
-	for (int i = 0; i < (int)this->_bullets.size(); i++) {
-		std::vector<Rectangle> others;
-		if ((others = this->_level.checkBulletCollision(this->_bullets.at(i).getBoundingBox())).size() > 0) {
-			this->_bullets.erase(this->_bullets.begin() + i--);
-		}
-	}
-
-	// Check projectile collisions with players
-	for (int i = 0; i < (int)this->_bullets.size(); i++) {
-		for (int j = 0; j < (int)this->_players.size(); j++) {
-			if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
-					&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
-				// TODO: remove all forces except blast if exists ?
-				this->_players.at(j).clearForces();
-
-				this->_players.at(j).addForce(this->_bullets.at(i).getForce());
-				this->_bullets.erase(this->_bullets.begin() + i--);
-				break;
+	if (!this->_paused) {
+		// Updating players position
+		for (int i = 0; i < (int)this->_players.size(); i++) {
+			this->_players.at(i).update(elapsedTime);
+			if (this->_players.at(i).getY() >= globals::SCREEN_HEIGHT + 200) {
+				this->_players.at(i).moveTo(this->_level.getPlayerSpawnPoint());
+				if (!this->_players.at(i).loseALife()) {
+					this->_paused = true;
+				}
 			}
 		}
-	}
 
-	// Check player collisions with slopes
-	for (int i = 0; i < (int)this->_players.size(); i++) {
-		std::vector<Slope> otherSlopes;
-		if ((otherSlopes = this->_level.checkSlopeCollision(this->_players.at(i).getBoundingBox())).size() > 0) {
-			this->_players.at(i).handleSlopeCollisions(otherSlopes);
+		// Updating the level (Animated level only)
+		this->_level.update(elapsedTime);
+
+		// Updating bullet position and destroy them if they're out of bound
+		for (int i = 0; i < (int)this->_bullets.size(); i++) {
+			this->_bullets.at(i).update(elapsedTime);
+			if (this->_bullets.at(i).getX() > globals::SCREEN_WIDTH || this->_bullets.at(i).getX() < 0) {
+				this->_bullets.erase(this->_bullets.begin() + i--);
+			}
+		}
+
+		// Updating the HUD
+		this->_hud.update(elapsedTime);
+
+		// Check players collisions with tiles
+		for (int i = 0; i < (int)this->_players.size(); i++) {
+			std::vector<Rectangle> others;
+			if ((others = this->_level.checkTileCollision(this->_players.at(i))).size() > 0) {
+				// If the player is colliding with at least one tile, handle it	
+				this->_players.at(i).handleTileCollisions(others);
+			}
+		}
+
+		// Check projectile collisions with tiles
+		for (int i = 0; i < (int)this->_bullets.size(); i++) {
+			std::vector<Rectangle> others;
+			if ((others = this->_level.checkBulletCollision(this->_bullets.at(i).getBoundingBox())).size() > 0) {
+				this->_bullets.erase(this->_bullets.begin() + i--);
+			}
+		}
+
+		// Check projectile collisions with players
+		for (int i = 0; i < (int)this->_bullets.size(); i++) {
+			for (int j = 0; j < (int)this->_players.size(); j++) {
+				if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
+					&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
+					// TODO: remove all forces except blast if exists ?
+					this->_players.at(j).clearForces();
+
+					this->_players.at(j).addForce(this->_bullets.at(i).getForce());
+					this->_bullets.erase(this->_bullets.begin() + i--);
+					break;
+				}
+			}
+		}
+
+		// Check player collisions with slopes
+		for (int i = 0; i < (int)this->_players.size(); i++) {
+			std::vector<Slope> otherSlopes;
+			if ((otherSlopes = this->_level.checkSlopeCollision(this->_players.at(i).getBoundingBox())).size() > 0) {
+				this->_players.at(i).handleSlopeCollisions(otherSlopes);
+			}
 		}
 	}
 }

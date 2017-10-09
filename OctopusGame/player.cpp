@@ -29,6 +29,8 @@ Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
 {
 	this->_numberOfPlayers++;
 	this->_id = this->_numberOfPlayers;
+	// TODO: change the number of lives
+	this->_lives = 9;
 
 	graphics.loadImage("Content/Sprites/BlobSprite.png");
 	this->setupAnimations();
@@ -73,6 +75,7 @@ const Force Player::getSumOfAllForces(int elapsedTime) {
 			this->_forces.erase(this->_forces.begin() + i--);
 		}
 		else {
+			// TODO: reduce forces based on timeLeft ( 1 - (1 / 1 + x))
 			f.direction.x += this->_forces.at(i).direction.x;
 			f.direction.y += this->_forces.at(i).direction.y;
 
@@ -81,6 +84,10 @@ const Force Player::getSumOfAllForces(int elapsedTime) {
 		}
 	}
 	return f;
+}
+
+const int Player::getLivesLeft() const {
+	return this->_lives;
 }
 
 void Player::moveLeft() {
@@ -231,6 +238,13 @@ void Player::addForce(Force f) {
 
 void Player::clearForces() {
 	this->_forces.clear();
+}
+
+bool Player::loseALife() {
+	this->_lives -= 1;
+	if (this->_lives > 0)
+		return true;
+	return false;
 }
 
 bool operator==(const Player &player1, const Player &player2) {

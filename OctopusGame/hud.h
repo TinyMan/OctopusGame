@@ -3,22 +3,26 @@
 
 #include "sprite.h"
 #include "player.h"
+#include <vector>
 
 class GraphicalOctopus;
 
 class HUD {
 public:
 	HUD();
-	HUD(GraphicalOctopus &graphics, Player &player);
+	HUD(GraphicalOctopus &graphics, Player* player1, Player* player2);
 
 	void update(int elapsedTime);
 	void draw(GraphicalOctopus &graphics);
 
 private:
-	Player _player;
+	// TODO: remove unecessary comments
+	//Player _player;
+	std::vector<Player*> _players;
 
 	// Health sprites
-	Sprite _healthBarSprite, _healthNumber, _currentHealthBar;
+	//Sprite _healthBarSprite, _healthNumber, _currentHealthBar;
+	std::vector<Sprite> _scores;
 };
 
 #endif // !HUD_H
