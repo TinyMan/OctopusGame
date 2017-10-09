@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" nextobjectid="12">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" nextobjectid="16">
  <tileset firstgid="1" source="Content/Tilesets/PrtCave.png"/>
  <layer name="platform tiles" width="20" height="16">
   <data>
@@ -335,5 +335,13 @@
   <object id="3" x="81.0909" y="160.909" width="174" height="14.1818"/>
   <object id="4" x="1" y="209" width="318.25" height="13.5"/>
   <object id="11" x="65.0909" y="81.2727" width="61.6364" height="13.4545"/>
+ </objectgroup>
+ <objectgroup name="spawn points">
+  <object id="13" name="player" x="78.6667" y="17" width="2.66667" height="2.33333">
+   <ellipse/>
+  </object>
+  <object id="14" name="player" x="239" y="17.3333" width="2.66667" height="2.33333">
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>

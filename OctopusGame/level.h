@@ -27,11 +27,11 @@ public:
 	std::vector<Rectangle> checkBulletCollision(const Rectangle &other);
 	std::vector<Slope> checkSlopeCollision(const Rectangle &other);
 
-	const Vector2 getPlayerSpawnPoint() const;
+	const std::vector<Vector2> getPlayerSpawnPoints() const;
 
 private:
 	std::string _mapName;
-	Vector2 _spawnPoint;
+	std::vector<Vector2> _spawnPoints;
 
 	Vector2 _size;
 	Vector2 _tileSize;

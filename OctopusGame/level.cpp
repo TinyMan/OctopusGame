@@ -22,7 +22,6 @@ Level::Level() {
 
 Level::Level(std::string mapName, Vector2 spawnPoint, GraphicalOctopus &graphics) :
 	_mapName(mapName),
-	_spawnPoint(spawnPoint),
 	_size(Vector2(0,0)) 
 {
 	this->loadMap(mapName, graphics);
@@ -300,8 +299,8 @@ pLayer = pLayer->NextSiblingElement("layer");
 						std::stringstream ss;
 						ss << name;
 						if (ss.str() == "player") {
-							this->_spawnPoint = Vector2((int)(std::ceil(x) * globals::TILE_SCALE),
-								(int)(std::ceil(y) * globals::TILE_SCALE));
+							this->_spawnPoints.push_back(Vector2((int)(std::ceil(x) * globals::TILE_SCALE),
+								(int)(std::ceil(y) * globals::TILE_SCALE)));
 						}
 
 						pObject = pObject->NextSiblingElement("object");
@@ -380,8 +379,8 @@ std::vector<Slope> Level::checkSlopeCollision(const Rectangle &other) {
 	return others;
 }
 
-const Vector2 Level::getPlayerSpawnPoint() const {
-	return this->_spawnPoint;
+const std::vector<Vector2> Level::getPlayerSpawnPoints() const {
+	return this->_spawnPoints;
 }
 
 Vector2 Level::getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight) {

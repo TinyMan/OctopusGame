@@ -36,8 +36,8 @@ void Game::gameLoop() {
 	this->_level = Level("TestMap", Vector2(100, 100), graphics);
 
 	// Adding two players
-	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoint()));
-	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoint()));
+	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoints().at(0)));
+	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoints().at(1)));
 
 	this->_hud = HUD(graphics, &this->_players.at(0), &this->_players.at(1));	
 
@@ -166,7 +166,7 @@ void Game::update(int elapsedTime) {
 		for (int i = 0; i < (int)this->_players.size(); i++) {
 			this->_players.at(i).update(elapsedTime);
 			if (this->_players.at(i).getY() >= globals::SCREEN_HEIGHT + 200) {
-				this->_players.at(i).moveTo(this->_level.getPlayerSpawnPoint());
+				this->_players.at(i).moveTo(this->_level.getPlayerSpawnPoints().at(i));
 				if (!this->_players.at(i).loseALife()) {
 					this->_paused = true;
 				}
