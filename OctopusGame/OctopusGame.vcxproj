@@ -145,6 +145,7 @@
     <ClInclude Include="animatedsprite.h" />
     <ClInclude Include="animatedtile.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="firearm.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphics.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="animatedsprite.cpp" />
     <ClCompile Include="animatedtile.cpp" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="firearm.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="hud.cpp" />

@@ -13,6 +13,9 @@ HUD::HUD(GraphicalOctopus &graphics, Player* player1, Player* player2){
 	// TODO: remove unecessary comments
 	this->_players.push_back(player1);
 	this->_players.push_back(player2);
+
+	//graphics.loadImage("Content/Sprites/TextBox.png");
+
 	//this->_healthBarSprite = Sprite(graphics, "Content/Sprites/TextBox.png", 0, 40, 64, 8, 35, 70);
 	this->_scores.push_back(Sprite(graphics, "Content/Sprites/TextBox.png", 0, 56, 8, 8, 66, 70));
 	this->_scores.push_back(Sprite(graphics, "Content/Sprites/TextBox.png", 0, 56, 8, 8, globals::SCREEN_WIDTH - 66, 70));

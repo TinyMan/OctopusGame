@@ -23,7 +23,7 @@ Sprite::Sprite(GraphicalOctopus &graphics, const std::string &filePath, int sour
 	this->_spriteSheet = graphics.loadImage(filePath);
 
 	if (this->_spriteSheet == NULL) {
-		printf("Error : Unable to load image\n");
+		printf("Error : Unable to load image \"%s\"\n", filePath.c_str());
 	}
 
 	this->_boundingBox = Rectangle(this->_x, this->_y, (width * globals::SPRITE_SCALE), 

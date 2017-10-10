@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "bullet.h"
 #include "graphics.h"
+#include "firearm.h"
 
 Bullet::Bullet() {
 
@@ -36,6 +37,14 @@ Bullet::Bullet(GraphicalOctopus &graphics, Player &player, float speed, Force fo
 		force.direction = Vector2f(-1.0f * force.power, 0.0f);
 	}
 	this->_force = force;
+}
+
+Bullet::Bullet(GraphicalOctopus &graphics, FireArm &firearm) :
+	Bullet(graphics, Vector2(firearm.getX(), firearm.getY()), firearm.getBulletDirection(), firearm.getBulletSpeed()) 
+{
+	this->_player = firearm.getPlayer();
+	this->_force = Force(0.4f, 250); // TODO: change force direction depending on facing 
+	this->_force.direction = Vector2f(1.0f * this->_force.power, 0.0f);
 }
 
 void Bullet::draw(GraphicalOctopus &graphics) {

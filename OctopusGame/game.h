@@ -12,6 +12,9 @@ class Game {
 public:
 	Game();
 	~Game();
+
+	// TODO: modify when bullet provider is here (--> private or delete)
+	std::vector<Bullet> _bullets;
 private:
 	void gameLoop();
 	void draw(GraphicalOctopus &graphics);
@@ -20,7 +23,7 @@ private:
 	std::vector<Player> _players;
 
 	Level _level;
-	std::vector<Bullet> _bullets;
+	
 
 	HUD _hud;
 	bool _paused;

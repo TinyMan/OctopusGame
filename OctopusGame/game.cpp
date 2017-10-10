@@ -36,8 +36,8 @@ void Game::gameLoop() {
 	this->_level = Level("TestMap", Vector2(100, 100), graphics);
 
 	// Adding two players
-	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoints().at(0)));
-	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoints().at(1)));
+	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoints().at(0), this));
+	this->_players.push_back(Player(graphics, this->_level.getPlayerSpawnPoints().at(1), this));
 
 	this->_hud = HUD(graphics, &this->_players.at(0), &this->_players.at(1));	
 
@@ -68,53 +68,54 @@ void Game::gameLoop() {
 		// Moving left and right
 		//		- first player
 		if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
-			this->_players.at(0).moveLeft();
+			this->_players.at(1).moveLeft();
 		}
 		else if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
-			this->_players.at(0).moveRight();
+			this->_players.at(1).moveRight();
 		}
 		//		- second player
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			this->_players.at(1).moveLeft();
+			this->_players.at(0).moveLeft();
 		}
 		else if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			this->_players.at(1).moveRight();
+			this->_players.at(0).moveRight();
 		}
 
 		// Dropping down and jumping
 		//		- first player
 		if (input.wasKeyPressed(SDL_SCANCODE_DOWN) || input.isKeyHeld(SDL_SCANCODE_DOWN)) {
-			this->_players.at(0).dropDown();
+			this->_players.at(1).dropDown();
 		}
 		else if (input.wasKeyPressed(SDL_SCANCODE_UP) || input.isKeyHeld(SDL_SCANCODE_UP)) {
-			this->_players.at(0).jump();
+			this->_players.at(1).jump();
 		}
 		//		- second player
 		if (input.wasKeyPressed(SDL_SCANCODE_S) || input.isKeyHeld(SDL_SCANCODE_S)) {
-			this->_players.at(1).dropDown();
+			this->_players.at(0).dropDown();
 		}
 		else if (input.wasKeyPressed(SDL_SCANCODE_W) || input.isKeyHeld(SDL_SCANCODE_W)) {
-			this->_players.at(1).jump();
+			this->_players.at(0).jump();
 		}
 
 		// Firing weapon
 		//		- first player
 		if (input.wasKeyPressed(SDL_SCANCODE_KP_4)) {
-			this->_bullets.push_back(Bullet(graphics, this->_players.at(0), 0.2f, Force(0.4f, 250)));
+			this->_bullets.push_back(Bullet(graphics, this->_players.at(1), 0.2f, Force(0.4f, 250)));
 		}
 		//		- second player
 		if (input.isKeyHeld(SDL_SCANCODE_G)) {
-			this->_bullets.push_back(Bullet(graphics, this->_players.at(1), 0.2f, Force(0.4f, 250)));
+			//this->_bullets.push_back(Bullet(graphics, this->_players.at(0), 0.2f, Force(0.4f, 250)));
+			this->_players.at(0).shoot();
 		}
 
 		// Stop motion
 		//		- first player
 		if (!input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
-			this->_players.at(0).stopMoving();
+			this->_players.at(1).stopMoving();
 		}
 		//		- second player
 		if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
-			this->_players.at(1).stopMoving();
+			this->_players.at(0).stopMoving();
 		}
 
 		// Pause/Unpause the game

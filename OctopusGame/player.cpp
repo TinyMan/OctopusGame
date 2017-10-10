@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "player.h"
 #include "graphics.h"
+#include "firearm.h"
 #include <algorithm>
 
 namespace player_constants {
@@ -20,21 +21,26 @@ Player::Player() {
 
 }
 
-Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint) :
+Player::Player(GraphicalOctopus &graphics, Vector2 spawnPoint, Game* game) :
 	AnimatedSprite(graphics, "Content/Sprites/BlobSprite.png", 0, 0, 32, 32, spawnPoint.x, spawnPoint.y, 100),
 	_dx(0.0f),
 	_dy(0.0f),
 	_facing(RIGHT),
-	_grounded(false)
+	_grounded(false),
+	_game(game),
+	_currentFireArm("PRIMARY")
 {
 	this->_numberOfPlayers++;
 	this->_id = this->_numberOfPlayers;
 	// TODO: change the number of lives
 	this->_lives = 9;
 
-	graphics.loadImage("Content/Sprites/BlobSprite.png");
 	this->setupAnimations();
 	this->playAnimation("IdleRight");
+
+	// Setting up weapons, TODO: close memory leak
+	this->_primary = new FireArm(graphics, spawnPoint, this);
+	this->_secondary = new FireArm(graphics, spawnPoint, this);
 }
 
 void Player::setupAnimations() {
@@ -93,18 +99,41 @@ const int Player::getLivesLeft() const {
 void Player::moveLeft() {
 	this->_dx = -player_constants::WALK_SPEED;
 	this->playAnimation("RunLeft");
+	if (this->_currentFireArm == "PRIMARY") {
+		printf("AAA\n");
+		this->_primary->playAnimation("IdleLeft");
+		this->_primary->setBulletDirection(LEFT);
+	}
+	else {
+		this->_secondary->playAnimation("IdleLeft");
+		this->_secondary->setBulletDirection(LEFT);
+	}
 	this->_facing = LEFT;
 }
 
 void Player::moveRight() {
 	this->_dx = player_constants::WALK_SPEED;
 	this->playAnimation("RunRight");
+	if (this->_currentFireArm == "PRIMARY") {
+		this->_primary->playAnimation("IdleRight");
+		this->_primary->setBulletDirection(RIGHT);
+	}
+	else {
+		this->_secondary->playAnimation("IdleRight");
+		this->_secondary->setBulletDirection(RIGHT);
+	}
 	this->_facing = RIGHT;
 }
 
 void Player::stopMoving() {
 	this->_dx = 0.0f;
-	this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");	
+	this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");
+	if (this->_currentFireArm == "PRIMARY") {
+		this->_primary->playAnimation((this->_facing == RIGHT ? "IdleRight" : "IdleLeft"));
+	}
+	else {
+		this->_secondary->playAnimation((this->_facing == RIGHT ? "IdleRight" : "IdleLeft"));
+	}
 }
 
 void Player::moveTo(Vector2 position) {
@@ -134,43 +163,43 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others) {
 		sides::Side collisionSide = Sprite::getCollisionSide(others.at(i));
 		if (collisionSide != sides::NONE) {
 			switch (collisionSide) {
-				case sides::LEFT:
-					this->_x = (others.at(i).getRight() + 1);
-					for (int i = 0; i < (int)this->_forces.size(); i++) {
-						if (this->_forces.at(i).direction.x <= 0.0f)
-							this->_forces.at(i).direction.x = - this->_forces.at(i).direction.x * globals::FORCE_REDUCTION;
-					}
-					break;
-				case sides::RIGHT :
-					this->_x = (others.at(i).getLeft() - this->_boundingBox.getWidth() - 1);
-					for (int i = 0; i < (int)this->_forces.size(); i++) {
-						if (this->_forces.at(i).direction.x >= 0.0f)
-							this->_forces.at(i).direction.x = - this->_forces.at(i).direction.x * globals::FORCE_REDUCTION;
-					}
-					break;
-				case sides::TOP :
-					this->_dy = 0.0f;
-					this->_y = (others.at(i).getBottom() + 1);
-					if (this->_grounded) {
-						this->_dx = 0.0f;
-						this->_x -= (this->_facing == RIGHT ? 1 : -1);
-					}
+			case sides::LEFT:
+				this->_x = (others.at(i).getRight() + 1);
+				for (int i = 0; i < (int)this->_forces.size(); i++) {
+					if (this->_forces.at(i).direction.x <= 0.0f)
+						this->_forces.at(i).direction.x = -this->_forces.at(i).direction.x * globals::FORCE_REDUCTION;
+				}
+				break;
+			case sides::RIGHT:
+				this->_x = (others.at(i).getLeft() - this->_boundingBox.getWidth() - 1);
+				for (int i = 0; i < (int)this->_forces.size(); i++) {
+					if (this->_forces.at(i).direction.x >= 0.0f)
+						this->_forces.at(i).direction.x = -this->_forces.at(i).direction.x * globals::FORCE_REDUCTION;
+				}
+				break;
+			case sides::TOP:
+				this->_dy = 0.0f;
+				this->_y = (others.at(i).getBottom() + 1);
+				if (this->_grounded) {
+					this->_dx = 0.0f;
+					this->_x -= (this->_facing == RIGHT ? 1 : -1);
+				}
 
-					for (int i = 0; i < (int)this->_forces.size(); i++) {
-						if (this->_forces.at(i).direction.y <= 0.0f)
-							this->_forces.at(i).direction.y = - this->_forces.at(i).direction.y * globals::FORCE_REDUCTION;
-					}
-					break;
-				case sides::BOTTOM :
-					this->_y = (others.at(i).getTop() - this->_boundingBox.getHeight() - 1);
-					this->_dy = 0.0f;
-					this->_grounded = true;
+				for (int i = 0; i < (int)this->_forces.size(); i++) {
+					if (this->_forces.at(i).direction.y <= 0.0f)
+						this->_forces.at(i).direction.y = -this->_forces.at(i).direction.y * globals::FORCE_REDUCTION;
+				}
+				break;
+			case sides::BOTTOM:
+				this->_y = (others.at(i).getTop() - this->_boundingBox.getHeight() - 1);
+				this->_dy = 0.0f;
+				this->_grounded = true;
 
-					for (int i = 0; i < (int)this->_forces.size(); i++) {
-						if (this->_forces.at(i).direction.y >= 0.0f)
-							this->_forces.at(i).direction.y = - this->_forces.at(i).direction.y * globals::FORCE_REDUCTION;
-					}
-					break;
+				for (int i = 0; i < (int)this->_forces.size(); i++) {
+					if (this->_forces.at(i).direction.y >= 0.0f)
+						this->_forces.at(i).direction.y = -this->_forces.at(i).direction.y * globals::FORCE_REDUCTION;
+				}
+				break;
 			}
 		}
 	}
@@ -188,7 +217,7 @@ void Player::handleSlopeCollisions(std::vector<Slope> &others) {
 		int centerX = this->_boundingBox.getCenterX();
 
 		// Now pass that x into the equation y = mx+b using newly found b get the y position
-		int newY = (int)(others.at(i).getSlope() * centerX + b) - 8; // 8 is temporary to fix a problem
+		int newY = (int)(others.at(i).getSlope() * centerX + b) - 8; // TODO: 8 is temporary to fix a problem
 
 		// Re-position the player to the correct y
 		if (this->_grounded) {
@@ -199,6 +228,7 @@ void Player::handleSlopeCollisions(std::vector<Slope> &others) {
 }
 
 void Player::update(int elapsedTime) {
+
 	// Apply gravity
 	if (this->_dy <= player_constants::GRAVITY_CAP) {
 		this->_dy += player_constants::GRAVITY * elapsedTime;
@@ -212,20 +242,37 @@ void Player::update(int elapsedTime) {
 	Force allForces = getSumOfAllForces(elapsedTime);
 
 	// Move by dx
-	this->_x += (int) (this->_dx * elapsedTime);
+	this->_x += (int)(this->_dx * elapsedTime);
 
 	// Move by dy
-	this->_y += (int) (this->_dy * elapsedTime);
+	this->_y += (int)(this->_dy * elapsedTime);
 
 	// Move by force
-	this->_x += (int) (allForces.direction.x * elapsedTime);
-	this->_y += (int) (allForces.direction.y * elapsedTime);
+	this->_x += (int)(allForces.direction.x * elapsedTime);
+	this->_y += (int)(allForces.direction.y * elapsedTime);
+
+	if (this->_currentFireArm == "PRIMARY") {
+		this->_primary->move(this->_x, this->_y, this->_grounded);
+		this->_primary->update(elapsedTime);
+	}
+	else {
+		this->_secondary->move(this->_x, this->_y, this->_grounded);
+		this->_secondary->update(elapsedTime);
+	}
+
+	this->_grounded = false;
 
 	AnimatedSprite::update(elapsedTime);
 }
 
 void Player::draw(GraphicalOctopus &graphics) {
 	AnimatedSprite::draw(graphics, (this->_x), (this->_y));
+	if (this->_currentFireArm == "PRIMARY") {
+		this->_primary->draw(graphics);
+	}
+	else {
+		this->_secondary->draw(graphics);
+	}
 }
 
 const int Player::getId() const {
@@ -245,6 +292,15 @@ bool Player::loseALife() {
 	if (this->_lives > 0)
 		return true;
 	return false;
+}
+
+void Player::shoot() {
+	if (this->_currentFireArm == "PRIMARY") {
+		this->_primary->shoot(this->_facing);
+	}
+	else {
+		this->_secondary->shoot(this->_facing);
+	}
 }
 
 bool operator==(const Player &player1, const Player &player2) {

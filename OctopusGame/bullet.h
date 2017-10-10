@@ -12,6 +12,7 @@ public:
 	Bullet();
 	Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing, float speed);
 	Bullet(GraphicalOctopus &graphics, Player &player, float speed, Force force);
+	Bullet(GraphicalOctopus &graphics, FireArm &firearm);
 	void draw(GraphicalOctopus &graphics);
 	void update(int elapsedTime);
 
