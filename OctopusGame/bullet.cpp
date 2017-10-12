@@ -25,9 +25,9 @@ Bullet::Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing,
 	}
 }
 
-Bullet::Bullet(GraphicalOctopus &graphics, Player &player, float speed, Force force) :
-	Bullet(graphics, Vector2((player.getFacing() == LEFT ? player.getX() : (player.getX() + player.getBoundingBox().getWidth() - 2)), 
-	(player.getY() + player.getBoundingBox().getHeight()/2)), player.getFacing(), speed)
+Bullet::Bullet(GraphicalOctopus &graphics, Player *player, float speed, Force force) :
+	Bullet(graphics, Vector2((player->getFacing() == LEFT ? player->getX() : (player->getX() + player->getBoundingBox().getWidth() - 2)), 
+	(player->getY() + player->getBoundingBox().getHeight()/2)), player->getFacing(), speed)
 {
 	this->_player = player;
 	if (this->_facing == RIGHT) {
@@ -71,7 +71,7 @@ void Bullet::setupAnimations() {
 	this->addAnimation(1, 1, 0, "BulletLeft", 9, 9 , Vector2(0, 0));
 }
 
-const Player& Bullet::getPlayer() const {
+const Player* Bullet::getPlayer() const {
 	return this->_player;
 }
 

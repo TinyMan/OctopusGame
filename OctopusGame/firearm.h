@@ -26,7 +26,7 @@ public:
 	void setupAnimations();
 
 	// Getters :
-	Player getPlayer() const;
+	Player* getPlayer() const;
 	const float getBulletSpeed() const;
 	const Direction getBulletDirection() const;
 	const float getBulletPower() const;

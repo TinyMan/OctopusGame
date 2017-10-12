@@ -100,7 +100,7 @@ void Game::gameLoop() {
 		// Firing weapon
 		//		- first player
 		if (input.wasKeyPressed(SDL_SCANCODE_KP_4)) {
-			this->_bullets.push_back(Bullet(graphics, this->_players.at(1), 0.2f, Force(0.4f, 250)));
+			this->_bullets.push_back(Bullet(graphics, &this->_players.at(1), 0.2f, Force(0.4f, 250)));
 		}
 		//		- second player
 		if (input.isKeyHeld(SDL_SCANCODE_G)) {
@@ -209,7 +209,7 @@ void Game::update(int elapsedTime) {
 		for (int i = 0; i < (int)this->_bullets.size(); i++) {
 			for (int j = 0; j < (int)this->_players.size(); j++) {
 				if (this->_bullets.at(i).getBoundingBox().collidesWith(this->_players.at(j).getBoundingBox())
-					&& !(this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
+					&& !(*this->_bullets.at(i).getPlayer() == this->_players.at(j))) {
 					// TODO: remove all forces except blast if exists ?
 					this->_players.at(j).clearForces();
 

@@ -11,7 +11,7 @@ class Bullet : public AnimatedSprite {
 public:
 	Bullet();
 	Bullet(GraphicalOctopus &graphics, Vector2 spawnPoint, Direction facing, float speed);
-	Bullet(GraphicalOctopus &graphics, Player &player, float speed, Force force);
+	Bullet(GraphicalOctopus &graphics, Player *player, float speed, Force force);
 	Bullet(GraphicalOctopus &graphics, FireArm &firearm);
 	void draw(GraphicalOctopus &graphics);
 	void update(int elapsedTime);
@@ -20,7 +20,7 @@ public:
 	virtual void setupAnimations();
 
 	// Getters :
-	const Player& getPlayer() const;
+	const Player* getPlayer() const;
 	Force getForce() const;
 
 	// handle collisions with tiles and players
@@ -28,7 +28,7 @@ protected:
 	
 private:
 	// Has a player that it cannot harm
-	Player _player;
+	Player* _player;
 	Direction _facing;
 	float _speed;
 	Force _force;

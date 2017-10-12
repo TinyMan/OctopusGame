@@ -96,8 +96,8 @@ void FireArm::move(int dx, int dy, bool grounded) {
 		this->_y = dy;	
 }
 
-Player FireArm::getPlayer() const {
-	return *this->_player;
+Player* FireArm::getPlayer() const {
+	return this->_player;
 }
 
 const float FireArm::getBulletSpeed() const {
